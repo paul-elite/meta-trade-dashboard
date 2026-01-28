@@ -51,14 +51,11 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url)
     }
 
-    // Check if user is admin
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('is_admin')
-      .eq('id', user.id)
-      .single()
+    // Check if user is admin - use RPC function to bypass RLS
+    const { data: isAdmin } = await supabase
+      .rpc('check_is_admin', { user_id: user.id })
 
-    if (!profile?.is_admin) {
+    if (!isAdmin) {
       const url = request.nextUrl.clone()
       url.pathname = '/dashboard'
       return NextResponse.redirect(url)
