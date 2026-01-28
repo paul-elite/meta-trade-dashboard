@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { formatCurrency, formatDate, getTransactionTypeColor } from '@/lib/utils'
-import { ArrowDownToLine, ArrowUpFromLine, RefreshCw, Search, Filter } from 'lucide-react'
+import { ArrowDownToLine, ArrowUpFromLine, RefreshCw, Search, Filter, Plus, Minus } from 'lucide-react'
 import { useStore } from '@/store/useStore'
 
 const statusVariants: Record<string, 'success' | 'warning' | 'danger' | 'default'> = {
@@ -21,6 +21,8 @@ const typeIcons = {
   deposit: ArrowDownToLine,
   withdraw: ArrowUpFromLine,
   transfer: RefreshCw,
+  admin_credit: Plus,
+  admin_debit: Minus,
 }
 
 export default function TransactionsPage() {

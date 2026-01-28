@@ -15,6 +15,7 @@ export interface Database {
           email: string
           full_name: string | null
           avatar_url: string | null
+          is_admin: boolean
           created_at: string
           updated_at: string
         }
@@ -23,6 +24,7 @@ export interface Database {
           email: string
           full_name?: string | null
           avatar_url?: string | null
+          is_admin?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -31,6 +33,7 @@ export interface Database {
           email?: string
           full_name?: string | null
           avatar_url?: string | null
+          is_admin?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -67,7 +70,7 @@ export interface Database {
         Row: {
           id: string
           user_id: string
-          type: 'deposit' | 'withdraw' | 'transfer'
+          type: 'deposit' | 'withdraw' | 'transfer' | 'admin_credit' | 'admin_debit'
           amount: number
           status: 'pending' | 'completed' | 'failed' | 'cancelled'
           description: string | null
@@ -78,7 +81,7 @@ export interface Database {
         Insert: {
           id?: string
           user_id: string
-          type: 'deposit' | 'withdraw' | 'transfer'
+          type: 'deposit' | 'withdraw' | 'transfer' | 'admin_credit' | 'admin_debit'
           amount: number
           status?: 'pending' | 'completed' | 'failed' | 'cancelled'
           description?: string | null
@@ -89,13 +92,40 @@ export interface Database {
         Update: {
           id?: string
           user_id?: string
-          type?: 'deposit' | 'withdraw' | 'transfer'
+          type?: 'deposit' | 'withdraw' | 'transfer' | 'admin_credit' | 'admin_debit'
           amount?: number
           status?: 'pending' | 'completed' | 'failed' | 'cancelled'
           description?: string | null
           reference?: string | null
           created_at?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      admin_audit_logs: {
+        Row: {
+          id: string
+          admin_id: string
+          action_type: 'credit' | 'debit' | 'profile_view'
+          target_user_id: string | null
+          details: Record<string, unknown>
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          admin_id: string
+          action_type: 'credit' | 'debit' | 'profile_view'
+          target_user_id?: string | null
+          details?: Record<string, unknown>
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          admin_id?: string
+          action_type?: 'credit' | 'debit' | 'profile_view'
+          target_user_id?: string | null
+          details?: Record<string, unknown>
+          created_at?: string
         }
         Relationships: []
       }
@@ -118,3 +148,8 @@ export interface Database {
 export type Profile = Database['public']['Tables']['profiles']['Row']
 export type Wallet = Database['public']['Tables']['wallets']['Row']
 export type Transaction = Database['public']['Tables']['transactions']['Row']
+export type AdminAuditLog = Database['public']['Tables']['admin_audit_logs']['Row']
+
+export interface UserWithWallet extends Profile {
+  wallets: Wallet[]
+}

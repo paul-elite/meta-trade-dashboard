@@ -14,6 +14,7 @@ import {
   Menu,
   X,
   Wallet,
+  Shield,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
@@ -94,6 +95,20 @@ export function Sidebar() {
                 </Link>
               )
             })}
+
+            {/* Admin Link - Only shown for admins */}
+            {profile?.is_admin && (
+              <Link
+                href="/admin"
+                onClick={() => {
+                  if (window.innerWidth < 1024) toggleSidebar()
+                }}
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-200 mt-4 border-t border-slate-700/50 pt-4"
+              >
+                <Shield className="h-5 w-5" />
+                Admin Panel
+              </Link>
+            )}
           </nav>
 
           {/* User section */}

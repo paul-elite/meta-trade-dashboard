@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { formatCurrency, formatDate, getTransactionTypeColor } from '@/lib/utils'
-import { ArrowDownToLine, ArrowUpFromLine, RefreshCw } from 'lucide-react'
+import { ArrowDownToLine, ArrowUpFromLine, RefreshCw, Plus, Minus } from 'lucide-react'
 import Link from 'next/link'
 import { Transaction } from '@/types/database'
 
@@ -24,6 +24,8 @@ const typeIcons = {
   deposit: ArrowDownToLine,
   withdraw: ArrowUpFromLine,
   transfer: RefreshCw,
+  admin_credit: Plus,
+  admin_debit: Minus,
 }
 
 export function TransactionList({ transactions, limit, showViewAll = true }: TransactionListProps) {
