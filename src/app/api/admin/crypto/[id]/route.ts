@@ -47,12 +47,15 @@ export async function PUT(
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      console.error('[Update] DB Error:', error)
+      throw error
+    }
 
     return NextResponse.json(cryptoOption)
   } catch (error) {
     console.error('Error updating crypto option:', error)
-    return NextResponse.json({ error: 'Failed to update crypto option' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to update crypto option', details: String(error) }, { status: 500 })
   }
 }
 

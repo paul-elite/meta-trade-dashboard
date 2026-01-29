@@ -99,10 +99,13 @@ export default function AdminCryptoPage() {
       })
 
       const results = await Promise.all(promises)
-      const failed = results.filter(r => !r.ok)
 
-      if (failed.length > 0) {
-        throw new Error('Some options failed to save')
+      // Check for failures
+      for (const res of results) {
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}))
+          throw new Error(data.details || data.error || 'Failed to save changes')
+        }
       }
 
       setSuccess('Payment methods updated successfully')
@@ -113,7 +116,7 @@ export default function AdminCryptoPage() {
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
       console.error(err)
-      setError('Failed to save changes. Please try again.')
+      setError(err instanceof Error ? err.message : 'Failed to save changes. Please try again.')
     } finally {
       setIsSaving(false)
     }

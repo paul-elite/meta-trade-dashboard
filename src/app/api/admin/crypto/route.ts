@@ -60,9 +60,11 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
+    console.log('[Creation] Body:', body)
     const { name, symbol, wallet_address, network, icon_url, is_enabled, min_deposit } = body
 
     if (!name || !symbol || !network) {
+      console.log('[Creation] Missing fields')
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
@@ -80,11 +82,14 @@ export async function POST(request: Request) {
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      console.error('[Creation] DB Error:', error)
+      throw error
+    }
 
     return NextResponse.json(cryptoOption)
   } catch (error) {
     console.error('Error creating crypto option:', error)
-    return NextResponse.json({ error: 'Failed to create crypto option' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to create crypto option', details: String(error) }, { status: 500 })
   }
 }
