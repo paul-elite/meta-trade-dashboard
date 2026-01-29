@@ -8,6 +8,7 @@ import {
   Users,
   LogOut,
   ArrowLeft,
+  Coins,
 } from 'lucide-react'
 import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
@@ -17,6 +18,7 @@ import { cn } from '@/lib/utils'
 const navigation = [
   { name: 'Overview', href: '/admin', icon: LayoutDashboard },
   { name: 'Users', href: '/admin/users', icon: Users },
+  { name: 'Crypto', href: '/admin/crypto', icon: Coins },
 ]
 
 export function AdminSidebar() {

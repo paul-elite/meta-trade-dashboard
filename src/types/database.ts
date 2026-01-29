@@ -129,6 +129,45 @@ export interface Database {
         }
         Relationships: []
       }
+      crypto_options: {
+        Row: {
+          id: string
+          name: string
+          symbol: string
+          wallet_address: string
+          network: string
+          icon_url: string | null
+          is_enabled: boolean
+          min_deposit: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          symbol: string
+          wallet_address: string
+          network: string
+          icon_url?: string | null
+          is_enabled?: boolean
+          min_deposit?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          symbol?: string
+          wallet_address?: string
+          network?: string
+          icon_url?: string | null
+          is_enabled?: boolean
+          min_deposit?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -149,6 +188,7 @@ export type Profile = Database['public']['Tables']['profiles']['Row']
 export type Wallet = Database['public']['Tables']['wallets']['Row']
 export type Transaction = Database['public']['Tables']['transactions']['Row']
 export type AdminAuditLog = Database['public']['Tables']['admin_audit_logs']['Row']
+export type CryptoOption = Database['public']['Tables']['crypto_options']['Row']
 
 export interface UserWithWallet extends Profile {
   wallets: Wallet[]
