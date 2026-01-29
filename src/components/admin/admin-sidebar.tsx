@@ -9,6 +9,7 @@ import {
   LogOut,
   ArrowLeft,
   Coins,
+  MessageSquare,
 } from 'lucide-react'
 import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
@@ -18,6 +19,7 @@ import { cn } from '@/lib/utils'
 const navigation = [
   { name: 'Overview', href: '/admin', icon: LayoutDashboard },
   { name: 'Users', href: '/admin/users', icon: Users },
+  { name: 'Chat', href: '/admin/chat', icon: MessageSquare },
   { name: 'Crypto', href: '/admin/crypto', icon: Coins },
 ]
 

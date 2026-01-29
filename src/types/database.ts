@@ -168,6 +168,84 @@ export interface Database {
         }
         Relationships: []
       }
+      conversations: {
+        Row: {
+          id: string
+          user_id: string | null
+          guest_session_id: string | null
+          status: 'open' | 'closed' | 'archived'
+          assigned_admin_id: string | null
+          last_message_at: string
+          guest_name: string | null
+          guest_email: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          guest_session_id?: string | null
+          status?: 'open' | 'closed' | 'archived'
+          assigned_admin_id?: string | null
+          last_message_at?: string
+          guest_name?: string | null
+          guest_email?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          guest_session_id?: string | null
+          status?: 'open' | 'closed' | 'archived'
+          assigned_admin_id?: string | null
+          last_message_at?: string
+          guest_name?: string | null
+          guest_email?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          id: string
+          conversation_id: string
+          sender_type: 'user' | 'guest' | 'admin' | 'system'
+          sender_id: string | null
+          content: string
+          message_type: 'text' | 'image' | 'file' | 'system'
+          is_read: boolean
+          read_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          conversation_id: string
+          sender_type: 'user' | 'guest' | 'admin' | 'system'
+          sender_id?: string | null
+          content: string
+          message_type?: 'text' | 'image' | 'file' | 'system'
+          is_read?: boolean
+          read_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          conversation_id?: string
+          sender_type?: 'user' | 'guest' | 'admin' | 'system'
+          sender_id?: string | null
+          content?: string
+          message_type?: 'text' | 'image' | 'file' | 'system'
+          is_read?: boolean
+          read_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -189,7 +267,14 @@ export type Wallet = Database['public']['Tables']['wallets']['Row']
 export type Transaction = Database['public']['Tables']['transactions']['Row']
 export type AdminAuditLog = Database['public']['Tables']['admin_audit_logs']['Row']
 export type CryptoOption = Database['public']['Tables']['crypto_options']['Row']
+export type Conversation = Database['public']['Tables']['conversations']['Row']
+export type Message = Database['public']['Tables']['messages']['Row']
 
 export interface UserWithWallet extends Profile {
   wallets: Wallet[]
+}
+
+export interface ConversationWithMessages extends Conversation {
+  messages: Message[]
+  profile?: Profile | null
 }
