@@ -312,7 +312,7 @@ export default function UserDetailPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Transaction History</CardTitle>
-            <Badge variant="secondary">{transactions.length} transactions</Badge>
+            <Badge variant="default">{transactions.length} transactions</Badge>
           </CardHeader>
           <CardContent className="p-0">
             {transactions.length === 0 ? (
