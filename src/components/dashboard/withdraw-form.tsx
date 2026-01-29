@@ -7,19 +7,21 @@ import { Input } from '@/components/ui/input'
 import { createClient } from '@/lib/supabase/client'
 import { useStore } from '@/store/useStore'
 import { formatCurrency, generateReference } from '@/lib/utils'
-import { Building2, CreditCard, CheckCircle2, AlertCircle } from 'lucide-react'
+import { CheckCircle2, AlertCircle, Wallet, ArrowRight } from 'lucide-react'
 
-const withdrawMethods = [
-  { id: 'bank', name: 'Bank Transfer', icon: Building2, description: '1-3 business days' },
-  { id: 'card', name: 'Debit Card', icon: CreditCard, description: 'Instant' },
+// Common crypto networks/coins for withdrawal
+const cryptoNetworks = [
+  { id: 'BTC', name: 'Bitcoin (BTC)' },
+  { id: 'ETH', name: 'Ethereum (ERC20)' },
+  { id: 'USDT', name: 'Tether (TRC20)' },
+  { id: 'USDT_ERC20', name: 'Tether (ERC20)' },
+  { id: 'LTC', name: 'Litecoin (LTC)' },
 ]
 
 export function WithdrawForm() {
   const [amount, setAmount] = useState('')
-  const [selectedMethod, setSelectedMethod] = useState('bank')
-  const [bankName, setBankName] = useState('')
-  const [accountNumber, setAccountNumber] = useState('')
-  const [accountName, setAccountName] = useState('')
+  const [walletAddress, setWalletAddress] = useState('')
+  const [selectedNetwork, setSelectedNetwork] = useState(cryptoNetworks[0].id)
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
@@ -42,8 +44,8 @@ export function WithdrawForm() {
       return
     }
 
-    if (selectedMethod === 'bank' && (!bankName || !accountNumber || !accountName)) {
-      setError('Please fill in all bank details')
+    if (!walletAddress || walletAddress.length < 10) {
+      setError('Please enter a valid wallet address')
       return
     }
 
@@ -63,8 +65,8 @@ export function WithdrawForm() {
           user_id: user.id,
           type: 'withdraw',
           amount: withdrawAmount,
-          status: selectedMethod === 'card' ? 'completed' : 'pending',
-          description: `Withdrawal to ${selectedMethod === 'bank' ? bankName : 'Debit Card'}`,
+          status: 'pending',
+          description: `Withdrawal to ${walletAddress} (${selectedNetwork})`,
           reference: generateReference(),
         })
         .select()
@@ -72,7 +74,7 @@ export function WithdrawForm() {
 
       if (txError) throw txError
 
-      // Update wallet balance
+      // Deduct balance immediately for withdrawals
       const newBalance = wallet.balance - withdrawAmount
       const { data: updatedWallet, error: walletError } = await supabase
         .from('wallets')
@@ -87,15 +89,13 @@ export function WithdrawForm() {
       addTransaction(transaction)
       setSuccess(true)
       setAmount('')
-      setBankName('')
-      setAccountNumber('')
-      setAccountName('')
+      setWalletAddress('')
 
-      // Reset success after 3 seconds
-      setTimeout(() => setSuccess(false), 3000)
+      // Reset success after user interaction or delay
+      // setTimeout(() => setSuccess(false), 5000)
     } catch (err) {
       console.error('Withdraw error:', err)
-      setError('Failed to process withdrawal. Please try again.')
+      setError(err instanceof Error ? err.message : 'Failed to process withdrawal')
     } finally {
       setIsLoading(false)
     }
@@ -103,20 +103,23 @@ export function WithdrawForm() {
 
   if (success) {
     return (
-      <Card className="max-w-lg mx-auto">
+      <Card className="max-w-lg mx-auto bg-zinc-900/50 border-zinc-800">
         <CardContent className="pt-6">
-          <div className="text-center py-8">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-yellow-500/10 mx-auto mb-4">
-              <CheckCircle2 className="h-8 w-8 text-yellow-500" />
+          <div className="text-center py-12">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-yellow-500/10 mx-auto mb-6">
+              <CheckCircle2 className="h-10 w-10 text-yellow-500" />
             </div>
-            <h3 className="text-xl font-semibold text-zinc-100 mb-2">
-              Withdrawal {selectedMethod === 'card' ? 'Successful' : 'Submitted'}!
-            </h3>
-            <p className="text-zinc-400">
-              {selectedMethod === 'card'
-                ? 'Your funds have been sent to your card.'
-                : 'Your withdrawal is being processed and will arrive in 1-3 business days.'}
+            <h3 className="text-2xl font-bold text-white mb-2">Withdrawal Submitted!</h3>
+            <p className="text-zinc-400 mb-8 max-w-xs mx-auto">
+              Your withdrawal request has been received and is being processed.
             </p>
+            <Button
+              onClick={() => setSuccess(false)}
+              className="bg-zinc-800 text-white hover:bg-zinc-700 w-full sm:w-auto px-8"
+              size="lg"
+            >
+              Back to Wallet
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -126,36 +129,42 @@ export function WithdrawForm() {
   return (
     <div className="max-w-lg mx-auto space-y-8">
       {/* Balance Card */}
-      <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950">
-        <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
+      <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-zinc-800 overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/5 rounded-bl-full -mr-8 -mt-8" />
+        <CardContent className="pt-8 pb-8 relative z-10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <p className="text-sm text-zinc-400 mb-1">Available Balance</p>
-              <p className="text-2xl font-bold text-zinc-100">
+              <p className="text-sm font-medium text-zinc-400 mb-1">Available Balance</p>
+              <p className="text-3xl font-bold text-white tracking-tight">
                 {formatCurrency(maxWithdraw)}
               </p>
             </div>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setAmount(maxWithdraw.toString())}
+              onClick={() => {
+                setAmount(maxWithdraw.toString())
+                setError('')
+              }}
+              className="border-zinc-700 hover:bg-zinc-800 text-zinc-300 self-start sm:self-center"
             >
-              Withdraw All
+              Withdraw Max
             </Button>
           </div>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-zinc-900/50 border-zinc-800">
         <CardHeader>
-          <CardTitle>Withdraw Funds</CardTitle>
-          <CardDescription>Transfer money to your bank or card</CardDescription>
+          <CardTitle className="text-white">Withdraw Funds</CardTitle>
+          <CardDescription className="text-zinc-400">Transfer crypto to your external wallet</CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
+
           {/* Amount Input */}
-          <div>
+          <div className="space-y-3">
             <Input
-              label="Amount"
+              label="Amount to Withdraw"
               type="number"
               placeholder="0.00"
               value={amount}
@@ -164,80 +173,67 @@ export function WithdrawForm() {
                 setError('')
               }}
               leftIcon={<span className="text-zinc-400 font-medium">$</span>}
-              error={error}
+              error={error && error.includes('amount') || error.includes('balance') ? error : ''}
+              className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-yellow-500/50 focus:ring-yellow-500/20 text-lg py-6"
             />
-            {parseFloat(amount) > maxWithdraw && (
-              <div className="flex items-center gap-2 mt-2 text-red-500 text-sm">
-                <AlertCircle className="h-4 w-4" />
-                Insufficient balance
-              </div>
-            )}
           </div>
 
-          {/* Withdraw Method */}
-          <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-3">
-              Withdraw To
+          {/* Network Selection */}
+          <div className="space-y-3">
+            <label className="block text-sm font-medium text-zinc-300">
+              Select Network
             </label>
-            <div className="grid grid-cols-1 gap-3">
-              {withdrawMethods.map((method) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {cryptoNetworks.map((network) => (
                 <button
-                  key={method.id}
-                  onClick={() => setSelectedMethod(method.id)}
-                  className={`flex items-center gap-3 p-4 rounded-lg border transition-all ${
-                    selectedMethod === method.id
-                      ? 'border-yellow-500 bg-yellow-500/10'
-                      : 'border-zinc-700 hover:border-slate-500 hover:bg-zinc-900'
-                  }`}
+                  key={network.id}
+                  onClick={() => setSelectedNetwork(network.id)}
+                  className={`flex items-center gap-3 p-3 rounded-xl border transition-all text-sm font-medium ${selectedNetwork === network.id
+                      ? 'border-yellow-500 bg-yellow-500/10 text-yellow-500'
+                      : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
+                    }`}
                 >
-                  <method.icon className={`h-5 w-5 ${
-                    selectedMethod === method.id ? 'text-yellow-500' : 'text-zinc-400'
-                  }`} />
-                  <div className="flex-1 text-left">
-                    <span className={`font-medium block ${
-                      selectedMethod === method.id ? 'text-yellow-500' : 'text-zinc-300'
-                    }`}>
-                      {method.name}
-                    </span>
-                    <span className="text-xs text-slate-500">{method.description}</span>
-                  </div>
+                  <div className={`w-2 h-2 rounded-full ${selectedNetwork === network.id ? 'bg-yellow-500' : 'bg-zinc-600'}`} />
+                  {network.name}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Bank Details (shown when bank is selected) */}
-          {selectedMethod === 'bank' && (
-            <div className="space-y-4 pt-2">
-              <Input
-                label="Bank Name"
-                placeholder="Enter your bank name"
-                value={bankName}
-                onChange={(e) => setBankName(e.target.value)}
-              />
-              <Input
-                label="Account Number"
-                placeholder="Enter account number"
-                value={accountNumber}
-                onChange={(e) => setAccountNumber(e.target.value)}
-              />
-              <Input
-                label="Account Name"
-                placeholder="Enter account holder name"
-                value={accountName}
-                onChange={(e) => setAccountName(e.target.value)}
-              />
+          {/* Wallet Address Input */}
+          <div className="space-y-3">
+            <Input
+              label="Wallet Address"
+              placeholder={`Enter your ${selectedNetwork} address`}
+              value={walletAddress}
+              onChange={(e) => {
+                setWalletAddress(e.target.value)
+                setError('')
+              }}
+              leftIcon={<Wallet className="h-4 w-4 text-zinc-400" />}
+              error={error && error.includes('address') ? error : ''}
+              className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 font-mono text-sm py-6 focus:border-yellow-500/50 focus:ring-yellow-500/20"
+            />
+            <p className="text-xs text-zinc-500">
+              Please double-check your address. Transfers cannot be reversed.
+            </p>
+          </div>
+
+          {error && !error.includes('amount') && !error.includes('balance') && !error.includes('address') && (
+            <div className="flex items-center gap-2 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              {error}
             </div>
           )}
 
           <Button
-            className="w-full"
-            size="lg"
+            className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-semibold text-lg py-6 rounded-xl shadow-lg shadow-yellow-500/10 hover:shadow-yellow-500/20 transition-all"
             onClick={handleWithdraw}
             isLoading={isLoading}
-            disabled={!amount || parseFloat(amount) <= 0 || parseFloat(amount) > maxWithdraw}
+            disabled={!amount || parseFloat(amount) <= 0 || parseFloat(amount) > maxWithdraw || !walletAddress}
+            rightIcon={<ArrowRight className="h-5 w-5 opacity-70" />}
           >
-            Withdraw ${amount || '0.00'}
+            Withdraw Funds
           </Button>
         </CardContent>
       </Card>
