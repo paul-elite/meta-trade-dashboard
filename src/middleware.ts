@@ -43,21 +43,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // Admin route protection
+  // Admin route protection - only check if logged in
+  // Admin access is verified at API level
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (!user) {
       const url = request.nextUrl.clone()
       url.pathname = '/login'
-      return NextResponse.redirect(url)
-    }
-
-    // Check if user is admin - use RPC function to bypass RLS
-    const { data: isAdmin } = await supabase
-      .rpc('check_is_admin', { user_id: user.id })
-
-    if (!isAdmin) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/dashboard'
       return NextResponse.redirect(url)
     }
   }
