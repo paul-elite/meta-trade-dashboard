@@ -1,13 +1,30 @@
 @import "tailwindcss";
 
+/* Custom dark colors using oklch (oklab-based) */
 :root {
-  --background: #09090b;
-  --foreground: #fafafa;
+  /* Deep blue-gray tones - between black and slate */
+  --bg-base: oklch(0.13 0.02 260);
+  --bg-elevated: oklch(0.16 0.02 260);
+  --bg-surface: oklch(0.19 0.018 260);
+  --border-subtle: oklch(0.25 0.015 260);
+  --foreground: oklch(0.95 0.01 260);
 }
 
 @theme inline {
-  --color-background: var(--background);
+  --color-background: var(--bg-base);
   --color-foreground: var(--foreground);
+
+  /* Custom color palette */
+  --color-base-950: oklch(0.13 0.02 260);
+  --color-base-900: oklch(0.16 0.02 260);
+  --color-base-800: oklch(0.19 0.018 260);
+  --color-base-700: oklch(0.25 0.015 260);
+  --color-base-600: oklch(0.35 0.012 260);
+  --color-base-500: oklch(0.45 0.01 260);
+  --color-base-400: oklch(0.55 0.01 260);
+  --color-base-300: oklch(0.70 0.008 260);
+  --color-base-200: oklch(0.85 0.005 260);
+  --color-base-100: oklch(0.95 0.003 260);
 }
 
 * {
@@ -21,7 +38,7 @@ html {
 }
 
 body {
-  background: var(--background);
+  background: var(--bg-base);
   color: var(--foreground);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -35,16 +52,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: var(--bg-base);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: var(--bg-surface);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: var(--border-subtle);
 }
 
 /* Form elements */
@@ -60,18 +77,14 @@ input[type="number"] {
 
 /* Focus styles */
 *:focus-visible {
-  outline: 2px solid #eab308;
+  outline: 2px solid oklch(0.8 0.18 90);
   outline-offset: 2px;
 }
 
 /* Animation utilities */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideUp {
@@ -95,6 +108,20 @@ input[type="number"] {
 
 /* Selection */
 ::selection {
-  background: #eab30833;
-  color: #fafafa;
+  background: oklch(0.8 0.18 90 / 0.2);
+  color: var(--foreground);
 }
+
+/* Custom utility classes for the base color palette */
+.bg-base-950 { background-color: oklch(0.13 0.02 260); }
+.bg-base-900 { background-color: oklch(0.16 0.02 260); }
+.bg-base-800 { background-color: oklch(0.19 0.018 260); }
+.bg-base-700 { background-color: oklch(0.25 0.015 260); }
+.bg-base-600 { background-color: oklch(0.35 0.012 260); }
+
+.border-base-800 { border-color: oklch(0.19 0.018 260); }
+.border-base-700 { border-color: oklch(0.25 0.015 260); }
+
+.text-base-400 { color: oklch(0.55 0.01 260); }
+.text-base-300 { color: oklch(0.70 0.008 260); }
+.text-base-100 { color: oklch(0.95 0.003 260); }
