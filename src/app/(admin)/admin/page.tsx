@@ -78,28 +78,32 @@ export default function AdminDashboard() {
       value: stats.totalUsers.toString(),
       icon: Users,
       color: 'text-blue-500',
-      bgColor: 'bg-blue-500/10'
+      bgColor: 'bg-blue-500/10',
+      href: '/admin/users'
     },
     {
       title: 'Total Balance',
       value: formatCurrency(stats.totalBalance, 'USD'),
       icon: Wallet,
       color: 'text-yellow-500',
-      bgColor: 'bg-yellow-500/10'
+      bgColor: 'bg-yellow-500/10',
+      href: null
     },
     {
       title: 'Total Transactions',
       value: stats.totalTransactions.toString(),
       icon: Activity,
       color: 'text-purple-500',
-      bgColor: 'bg-purple-500/10'
+      bgColor: 'bg-purple-500/10',
+      href: '/admin/transactions'
     },
     {
       title: 'Recent (24h)',
       value: stats.recentTransactions.toString(),
       icon: TrendingUp,
       color: 'text-orange-500',
-      bgColor: 'bg-orange-500/10'
+      bgColor: 'bg-orange-500/10',
+      href: '/admin/transactions'
     }
   ]
 
@@ -113,23 +117,33 @@ export default function AdminDashboard() {
       <div className="p-8 space-y-8">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {statCards.map((stat) => (
-            <Card key={stat.title}>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-zinc-400">{stat.title}</p>
-                    <p className="text-2xl font-bold text-white mt-1">
-                      {isLoading ? '...' : stat.value}
-                    </p>
+          {statCards.map((stat) => {
+            const content = (
+              <Card className={stat.href ? 'cursor-pointer hover:bg-zinc-900/70 transition-colors' : ''}>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-zinc-400">{stat.title}</p>
+                      <p className="text-2xl font-bold text-white mt-1">
+                        {isLoading ? '...' : stat.value}
+                      </p>
+                    </div>
+                    <div className={`p-3 rounded-lg ${stat.bgColor}`}>
+                      <stat.icon className={`h-6 w-6 ${stat.color}`} />
+                    </div>
                   </div>
-                  <div className={`p-3 rounded-lg ${stat.bgColor}`}>
-                    <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            )
+
+            return stat.href ? (
+              <Link key={stat.title} href={stat.href}>
+                {content}
+              </Link>
+            ) : (
+              <div key={stat.title}>{content}</div>
+            )
+          })}
         </div>
 
         {/* Quick Actions */}
