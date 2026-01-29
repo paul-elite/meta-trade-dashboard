@@ -21,7 +21,13 @@ const navigation = [
   { name: 'Crypto', href: '/admin/crypto', icon: Coins },
 ]
 
-export function AdminSidebar() {
+
+
+interface AdminSidebarProps {
+  onClose?: () => void
+}
+
+export function AdminSidebar({ onClose }: AdminSidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const { profile } = useStore()
@@ -37,7 +43,7 @@ export function AdminSidebar() {
   }
 
   return (
-    <div className="flex h-full w-72 flex-col bg-zinc-950 border-r border-zinc-800/50">
+    <div className="flex h-full w-full lg:w-72 flex-col bg-zinc-950 border-r border-zinc-800/50">
       {/* Logo */}
       <div className="flex h-20 items-center justify-center border-b border-zinc-800/50">
         <Image
@@ -64,6 +70,7 @@ export function AdminSidebar() {
                   ? 'bg-red-500/10 text-red-500'
                   : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
               )}
+              onClick={onClose}
             >
               <item.icon className="h-5 w-5" />
               {item.name}
