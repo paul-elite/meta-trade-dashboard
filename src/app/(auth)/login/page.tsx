@@ -40,44 +40,44 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="w-full max-w-md">
-      <div className="bg-[#1a1a1a] rounded-3xl p-10 shadow-2xl">
+    <div className="w-full max-w-lg">
+      <div className="bg-[#1a1a1a] rounded-3xl px-14 py-16 shadow-2xl">
         {/* Logo */}
-        <div className="flex justify-center mb-10">
+        <div className="flex justify-center mb-14">
           <Image
             src="/logo.png"
             alt="Logo"
-            width={48}
-            height={48}
-            className="h-12 w-auto"
+            width={56}
+            height={56}
+            className="h-14 w-auto"
           />
         </div>
 
         {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-2xl font-semibold text-white tracking-tight">
+        <div className="mb-12">
+          <h1 className="text-3xl font-semibold text-white tracking-tight">
             Welcome back
           </h1>
-          <p className="text-[#888] mt-2">
+          <p className="text-[#888] mt-3 text-lg">
             Sign in to your account
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form onSubmit={handleLogin} className="space-y-8">
           {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+            <div className="p-5 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400">
               {error}
             </div>
           )}
 
           {/* Email */}
           <div>
-            <label className="block text-sm text-[#888] mb-2">
+            <label className="block text-sm text-[#888] mb-3 ml-1">
               Email
             </label>
             <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#666]">
+              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-[#666]">
                 <Mail className="h-5 w-5" />
               </div>
               <input
@@ -86,18 +86,18 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 required
-                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-xl pl-12 pr-4 py-4 text-white placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
+                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-2xl pl-14 pr-6 py-5 text-white text-lg placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
               />
             </div>
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-sm text-[#888] mb-2">
+            <label className="block text-sm text-[#888] mb-3 ml-1">
               Password
             </label>
             <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#666]">
+              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-[#666]">
                 <Lock className="h-5 w-5" />
               </div>
               <input
@@ -106,7 +106,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 required
-                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-xl pl-12 pr-4 py-4 text-white placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
+                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-2xl pl-14 pr-6 py-5 text-white text-lg placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
               />
             </div>
           </div>
@@ -115,14 +115,14 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-[#f5f5f5] hover:bg-white text-[#1a1a1a] font-medium py-4 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+            className="w-full bg-[#f5f5f5] hover:bg-white text-[#1a1a1a] font-semibold text-lg py-5 rounded-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
           >
             {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
         {/* Footer */}
-        <p className="text-center text-[#666] mt-8">
+        <p className="text-center text-[#666] mt-12 text-base">
           Don&apos;t have an account?{' '}
           <Link href="/signup" className="text-white hover:underline">
             Sign up
