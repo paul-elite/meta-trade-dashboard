@@ -50,7 +50,9 @@ export default function AdminCryptoPage() {
 
         data.forEach(opt => {
           if (addresses.hasOwnProperty(opt.symbol)) {
-            newAddresses[opt.symbol] = opt.wallet_address
+            // If the address is the placeholder, show it as empty to the user
+            const address = opt.wallet_address.includes('_SETUP_REQUIRED') ? '' : opt.wallet_address
+            newAddresses[opt.symbol] = address
             newRecords[opt.symbol] = opt
           }
         })
@@ -72,13 +74,19 @@ export default function AdminCryptoPage() {
 
     try {
       const promises = STATIC_OPTIONS.map(async (opt) => {
-        const address = addresses[opt.symbol]
+        let address = addresses[opt.symbol]?.trim()
+
+        // Use a unique placeholder if empty to avoid DB unique constraint on ""
+        if (!address) {
+          address = `${opt.symbol}_SETUP_REQUIRED`
+        }
+
         const existingRecord = dbRecords[opt.symbol]
 
         const payload = {
           ...opt,
           wallet_address: address,
-          is_enabled: true, // Always enable if we are saving it
+          is_enabled: true,
         }
 
         if (existingRecord) {
