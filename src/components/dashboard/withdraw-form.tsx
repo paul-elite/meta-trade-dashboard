@@ -13,9 +13,6 @@ import { CheckCircle2, AlertCircle, Wallet, ArrowRight } from 'lucide-react'
 const cryptoNetworks = [
   { id: 'BTC', name: 'Bitcoin (BTC)' },
   { id: 'ETH', name: 'Ethereum (ERC20)' },
-  { id: 'USDT', name: 'Tether (TRC20)' },
-  { id: 'USDT_ERC20', name: 'Tether (ERC20)' },
-  { id: 'LTC', name: 'Litecoin (LTC)' },
 ]
 
 export function WithdrawForm() {
@@ -189,8 +186,8 @@ export function WithdrawForm() {
                   key={network.id}
                   onClick={() => setSelectedNetwork(network.id)}
                   className={`flex items-center gap-3 p-3 rounded-xl border transition-all text-sm font-medium ${selectedNetwork === network.id
-                      ? 'border-yellow-500 bg-yellow-500/10 text-yellow-500'
-                      : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
+                    ? 'border-yellow-500 bg-yellow-500/10 text-yellow-500'
+                    : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
                     }`}
                 >
                   <div className={`w-2 h-2 rounded-full ${selectedNetwork === network.id ? 'bg-yellow-500' : 'bg-zinc-600'}`} />
