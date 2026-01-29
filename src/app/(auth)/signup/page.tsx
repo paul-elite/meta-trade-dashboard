@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
-import { Mail, Lock, User } from 'lucide-react'
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState('')
@@ -72,31 +71,31 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="w-full max-w-lg">
-      <div className="bg-[#1a1a1a] rounded-3xl px-14 py-16 shadow-2xl">
+    <div className="w-full max-w-xl">
+      <div className="bg-[#1a1a1a] rounded-3xl px-16 py-20 shadow-2xl">
         {/* Logo */}
-        <div className="flex justify-center mb-14">
+        <div className="flex justify-center mb-16">
           <Image
             src="/logo.png"
             alt="Logo"
-            width={56}
-            height={56}
-            className="h-14 w-auto"
+            width={64}
+            height={64}
+            className="h-16 w-auto"
           />
         </div>
 
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-14">
           <h1 className="text-3xl font-semibold text-white tracking-tight">
             Create account
           </h1>
-          <p className="text-[#888] mt-3 text-lg">
+          <p className="text-[#888] mt-4 text-lg">
             Start your journey with MetaTrade
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSignup} className="space-y-7">
+        <form onSubmit={handleSignup} className="space-y-8">
           {error && (
             <div className="p-5 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400">
               {error}
@@ -105,86 +104,66 @@ export default function SignupPage() {
 
           {/* Full Name */}
           <div>
-            <label className="block text-sm text-[#888] mb-3 ml-1">
+            <label className="block text-sm text-[#888] mb-4">
               Full Name
             </label>
-            <div className="relative">
-              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-[#666]">
-                <User className="h-5 w-5" />
-              </div>
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Enter your full name"
-                required
-                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-2xl pl-14 pr-6 py-5 text-white text-lg placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
-              />
-            </div>
+            <input
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="Enter your full name"
+              required
+              className="w-full bg-[#252525] border border-[#2a2a2a] rounded-2xl px-6 py-5 text-white text-lg placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
+            />
           </div>
 
           {/* Email */}
           <div>
-            <label className="block text-sm text-[#888] mb-3 ml-1">
+            <label className="block text-sm text-[#888] mb-4">
               Email
             </label>
-            <div className="relative">
-              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-[#666]">
-                <Mail className="h-5 w-5" />
-              </div>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                required
-                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-2xl pl-14 pr-6 py-5 text-white text-lg placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
-              />
-            </div>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+              className="w-full bg-[#252525] border border-[#2a2a2a] rounded-2xl px-6 py-5 text-white text-lg placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
+            />
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-sm text-[#888] mb-3 ml-1">
+            <label className="block text-sm text-[#888] mb-4">
               Password
             </label>
-            <div className="relative">
-              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-[#666]">
-                <Lock className="h-5 w-5" />
-              </div>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Create a password"
-                required
-                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-2xl pl-14 pr-6 py-5 text-white text-lg placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
-              />
-            </div>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Create a password"
+              required
+              className="w-full bg-[#252525] border border-[#2a2a2a] rounded-2xl px-6 py-5 text-white text-lg placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
+            />
           </div>
 
           {/* Confirm Password */}
           <div>
-            <label className="block text-sm text-[#888] mb-3 ml-1">
+            <label className="block text-sm text-[#888] mb-4">
               Confirm Password
             </label>
-            <div className="relative">
-              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-[#666]">
-                <Lock className="h-5 w-5" />
-              </div>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm your password"
-                required
-                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-2xl pl-14 pr-6 py-5 text-white text-lg placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
-              />
-            </div>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm your password"
+              required
+              className="w-full bg-[#252525] border border-[#2a2a2a] rounded-2xl px-6 py-5 text-white text-lg placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
+            />
           </div>
 
           {/* Terms */}
-          <div className="flex items-start gap-4 pt-2">
+          <div className="flex items-start gap-4 pt-4">
             <input
               type="checkbox"
               required
@@ -206,14 +185,14 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-[#f5f5f5] hover:bg-white text-[#1a1a1a] font-semibold text-lg py-5 rounded-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+            className="w-full bg-[#f5f5f5] hover:bg-white text-[#1a1a1a] font-semibold text-lg py-5 rounded-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? 'Creating account...' : 'Create Account'}
           </button>
         </form>
 
         {/* Footer */}
-        <p className="text-center text-[#666] mt-12 text-base">
+        <p className="text-center text-[#666] mt-14 text-base">
           Already have an account?{' '}
           <Link href="/login" className="text-white hover:underline">
             Sign in
