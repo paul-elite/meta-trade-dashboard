@@ -16,7 +16,7 @@ export function WalletCard() {
       <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-transparent" />
       <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-yellow-500/5 blur-3xl" />
 
-      <div className="relative p-6">
+      <div className="relative p-5 md:p-6">
         <div className="flex items-start justify-between mb-6">
           <div>
             <p className="text-sm text-zinc-400 mb-1">Total Balance</p>
