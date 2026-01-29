@@ -19,13 +19,10 @@ export async function GET(request: Request) {
     const limit = parseInt(url.searchParams.get('limit') || '20')
     const search = url.searchParams.get('search') || ''
 
-    // Fetch users with their wallets
+    // Fetch users (without wallet join for now)
     let query = supabase
       .from('profiles')
-      .select(`
-        *,
-        wallets (*)
-      `, { count: 'exact' })
+      .select('*', { count: 'exact' })
 
     if (search) {
       query = query.or(`email.ilike.%${search}%,full_name.ilike.%${search}%`)
