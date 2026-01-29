@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import Image from 'next/image'
 
 const navLinks = [
   { href: '#features', label: 'Features' },
@@ -21,10 +22,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-yellow-500 flex items-center justify-center">
-              <span className="text-black font-bold text-lg">M</span>
-            </div>
-            <span className="text-white font-bold text-xl">MetaTrade</span>
+            <Image src="../../../public/logo.png" alt="MetaTrade Logo" width={32} height={32} />
           </Link>
 
           {/* Desktop Navigation */}
