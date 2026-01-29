@@ -115,14 +115,17 @@ export function UserTable({ users, isLoading, onRefresh }: UserTableProps) {
               key={user.id}
               className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 hover:border-zinc-700 transition-colors"
             >
-              <div className="flex items-start justify-between gap-4">
+              <div
+                className="flex items-start justify-between gap-4 cursor-pointer"
+                onClick={() => router.push(`/admin/users/${user.id}`)}
+              >
                 {/* User Info */}
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-zinc-800 text-white font-semibold text-lg">
                     {user.full_name?.[0] || user.email[0].toUpperCase()}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-white truncate">
+                    <p className="text-sm font-medium text-white truncate hover:text-yellow-500 transition-colors">
                       {user.full_name || 'No name'}
                     </p>
                     <p className="text-xs text-zinc-400 truncate">{user.email}</p>
