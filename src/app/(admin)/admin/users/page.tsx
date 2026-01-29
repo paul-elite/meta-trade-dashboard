@@ -77,10 +77,10 @@ export default function AdminUsersPage() {
           </CardContent>
         </Card>
 
-        {/* Users Table */}
+        {/* Users Grid */}
         <Card>
           <CardContent className="p-0">
-            <UserTable users={users} isLoading={isLoading} />
+            <UserTable users={users} isLoading={isLoading} onRefresh={fetchUsers} />
           </CardContent>
         </Card>
       </div>
