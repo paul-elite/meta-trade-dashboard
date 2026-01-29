@@ -90,7 +90,7 @@ export default function SignupPage() {
             Create account
           </h1>
           <p className="text-[#888] mt-2 sm:mt-3 text-base sm:text-lg">
-            Start your journey with MetaTrade
+            Start your journey with BitCap
           </p>
         </div>
 

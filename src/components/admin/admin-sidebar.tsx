@@ -1,12 +1,11 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard,
   Users,
-  History,
-  Shield,
   LogOut,
   ArrowLeft,
 } from 'lucide-react'
@@ -38,9 +37,14 @@ export function AdminSidebar() {
   return (
     <div className="flex h-full w-72 flex-col bg-zinc-950 border-r border-zinc-800/50">
       {/* Logo */}
-      <div className="flex h-20 items-center gap-4 px-8 border-b border-zinc-800/50">
-        <Shield className="h-8 w-8 text-red-500" />
-        <span className="text-xl font-bold text-white tracking-tight">Admin Panel</span>
+      <div className="flex h-20 items-center justify-center border-b border-zinc-800/50">
+        <Image
+          src="/logo.png"
+          alt="BitCap"
+          width={120}
+          height={40}
+          className="h-10 w-auto"
+        />
       </div>
 
       {/* Navigation */}

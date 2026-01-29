@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'MetaTrade - Digital Wallet Dashboard',
-  description: 'Manage your finances with MetaTrade - deposit, withdraw, and track your transactions.',
+  title: 'BitCap - Digital Wallet Dashboard',
+  description: 'Manage your finances with BitCap - deposit, withdraw, and track your transactions.',
 }
 
 export default function RootLayout({

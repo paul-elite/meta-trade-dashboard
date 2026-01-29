@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { useStore } from '@/store/useStore'
@@ -13,7 +14,6 @@ import {
   LogOut,
   Menu,
   X,
-  Wallet,
   Shield,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
@@ -65,11 +65,14 @@ export function Sidebar() {
       >
         <div className="flex h-full flex-col">
           {/* Logo */}
-          <div className="flex h-20 items-center gap-4 px-8 border-b border-zinc-800/50">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-600">
-              <Wallet className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-xl font-bold text-zinc-100">MetaTrade</span>
+          <div className="flex h-20 items-center justify-center border-b border-zinc-800/50">
+            <Image
+              src="/logo.png"
+              alt="BitCap"
+              width={120}
+              height={40}
+              className="h-10 w-auto"
+            />
           </div>
 
           {/* Navigation */}
