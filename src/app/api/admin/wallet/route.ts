@@ -75,14 +75,17 @@ export async function POST(request: Request) {
     wallet = newWallet
   }
 
+  // Ensure balance is a number
+  const currentBalance = Number(wallet.balance) || 0
+
   // Check sufficient balance for debit
-  if (type === 'debit' && wallet.balance < numAmount) {
+  if (type === 'debit' && currentBalance < numAmount) {
     return NextResponse.json({ error: 'Insufficient balance' }, { status: 400 })
   }
 
   const newBalance = type === 'credit'
-    ? wallet.balance + numAmount
-    : wallet.balance - numAmount
+    ? currentBalance + numAmount
+    : currentBalance - numAmount
 
   // Update wallet
   const { error: updateError } = await adminClient
@@ -119,7 +122,7 @@ export async function POST(request: Request) {
     details: {
       amount: numAmount,
       description,
-      previous_balance: wallet.balance,
+      previous_balance: currentBalance,
       new_balance: newBalance
     }
   })
