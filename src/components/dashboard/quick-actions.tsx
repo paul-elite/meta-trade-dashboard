@@ -44,22 +44,7 @@ const actions = [
     color: 'text-purple-500',
     bgColor: 'bg-purple-500/10 hover:bg-purple-500/20',
   },
-  {
-    name: 'Cards',
-    description: 'Manage your cards',
-    href: '#',
-    icon: CreditCard,
-    color: 'text-orange-500',
-    bgColor: 'bg-orange-500/10 hover:bg-orange-500/20',
-  },
-  {
-    name: 'Bank',
-    description: 'Link bank accounts',
-    href: '#',
-    icon: Building2,
-    color: 'text-cyan-500',
-    bgColor: 'bg-cyan-500/10 hover:bg-cyan-500/20',
-  },
+  
 ]
 
 export function QuickActions() {
