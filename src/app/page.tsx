@@ -9,6 +9,7 @@ import { ChatWidget } from '@/components/chat/chat-widget'
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-zinc-950">
+      <script src="//code.tidio.co/rs6cfg6ogapw11zpxfo1f24ruvmyrnxl.js" async></script>
       <Navbar />
       <HeroSection />
       <FeaturesGrid />
