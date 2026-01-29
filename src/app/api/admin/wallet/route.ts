@@ -44,14 +44,35 @@ export async function POST(request: Request) {
   }
 
   // Get current wallet balance
-  const { data: wallet, error: walletError } = await adminClient
+  let { data: wallet } = await adminClient
     .from('wallets')
     .select('*')
     .eq('user_id', userId)
     .single()
 
-  if (walletError || !wallet) {
-    return NextResponse.json({ error: 'Wallet not found' }, { status: 404 })
+  // Create wallet if it doesn't exist
+  if (!wallet) {
+    if (type === 'debit') {
+      return NextResponse.json({ error: 'Cannot debit - user has no wallet' }, { status: 400 })
+    }
+
+    // Create a new wallet for the user
+    const { data: newWallet, error: createError } = await adminClient
+      .from('wallets')
+      .insert({
+        user_id: userId,
+        balance: 0,
+        currency: 'USD'
+      })
+      .select()
+      .single()
+
+    if (createError || !newWallet) {
+      console.error('Error creating wallet:', createError)
+      return NextResponse.json({ error: 'Failed to create wallet' }, { status: 500 })
+    }
+
+    wallet = newWallet
   }
 
   // Check sufficient balance for debit
