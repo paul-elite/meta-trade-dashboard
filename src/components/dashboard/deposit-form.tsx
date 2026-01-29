@@ -92,11 +92,11 @@ export function DepositForm() {
       <Card className="max-w-lg mx-auto">
         <CardContent className="pt-6">
           <div className="text-center py-8">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 mx-auto mb-4">
-              <CheckCircle2 className="h-8 w-8 text-emerald-500" />
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-yellow-500/10 mx-auto mb-4">
+              <CheckCircle2 className="h-8 w-8 text-yellow-500" />
             </div>
-            <h3 className="text-xl font-semibold text-slate-100 mb-2">Deposit Successful!</h3>
-            <p className="text-slate-400">Your funds have been added to your wallet.</p>
+            <h3 className="text-xl font-semibold text-zinc-100 mb-2">Deposit Successful!</h3>
+            <p className="text-zinc-400">Your funds have been added to your wallet.</p>
           </div>
         </CardContent>
       </Card>
@@ -119,7 +119,7 @@ export function DepositForm() {
               placeholder="0.00"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              leftIcon={<span className="text-slate-400 font-medium">$</span>}
+              leftIcon={<span className="text-zinc-400 font-medium">$</span>}
               error={error}
             />
             <div className="flex flex-wrap gap-2 mt-3">
@@ -127,7 +127,7 @@ export function DepositForm() {
                 <button
                   key={quickAmount}
                   onClick={() => setAmount(quickAmount.toString())}
-                  className="px-3 py-1.5 text-sm rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-700 hover:border-slate-500 transition-colors"
+                  className="px-3 py-1.5 text-sm rounded-lg border border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:border-slate-500 transition-colors"
                 >
                   ${quickAmount}
                 </button>
@@ -137,7 +137,7 @@ export function DepositForm() {
 
           {/* Payment Method */}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-3">
+            <label className="block text-sm font-medium text-zinc-300 mb-3">
               Payment Method
             </label>
             <div className="grid grid-cols-1 gap-3">
@@ -147,15 +147,15 @@ export function DepositForm() {
                   onClick={() => setSelectedMethod(method.id)}
                   className={`flex items-center gap-3 p-4 rounded-lg border transition-all ${
                     selectedMethod === method.id
-                      ? 'border-emerald-500 bg-emerald-500/10'
-                      : 'border-slate-600 hover:border-slate-500 hover:bg-slate-800'
+                      ? 'border-yellow-500 bg-yellow-500/10'
+                      : 'border-zinc-700 hover:border-slate-500 hover:bg-zinc-900'
                   }`}
                 >
                   <method.icon className={`h-5 w-5 ${
-                    selectedMethod === method.id ? 'text-emerald-500' : 'text-slate-400'
+                    selectedMethod === method.id ? 'text-yellow-500' : 'text-zinc-400'
                   }`} />
                   <span className={`font-medium ${
-                    selectedMethod === method.id ? 'text-emerald-500' : 'text-slate-300'
+                    selectedMethod === method.id ? 'text-yellow-500' : 'text-zinc-300'
                   }`}>
                     {method.name}
                   </span>

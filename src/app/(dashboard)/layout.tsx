@@ -13,7 +13,7 @@ export default function DashboardLayout({
 
   return (
     <AuthProvider>
-      <div className="flex h-screen bg-slate-900">
+      <div className="flex h-screen bg-zinc-950">
         <Sidebar />
         <main className="flex-1 overflow-auto">
           {children}

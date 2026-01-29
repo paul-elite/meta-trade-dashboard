@@ -40,22 +40,22 @@ export function Modal({ isOpen, onClose, title, description, children, className
       />
       <div
         className={cn(
-          'relative z-50 w-full max-w-md rounded-xl border border-slate-700 bg-slate-800 p-6 shadow-2xl',
+          'relative z-50 w-full max-w-md rounded-xl border border-zinc-800 bg-zinc-900 p-6 shadow-2xl',
           'animate-in fade-in-0 zoom-in-95 duration-200',
           className
         )}
       >
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-1 text-slate-400 hover:bg-slate-700 hover:text-slate-100 transition-colors"
+          className="absolute right-4 top-4 rounded-lg p-1 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 transition-colors"
         >
           <X className="h-5 w-5" />
         </button>
         {title && (
           <div className="mb-4">
-            <h2 className="text-xl font-semibold text-slate-100">{title}</h2>
+            <h2 className="text-xl font-semibold text-zinc-100">{title}</h2>
             {description && (
-              <p className="mt-1 text-sm text-slate-400">{description}</p>
+              <p className="mt-1 text-sm text-zinc-400">{description}</p>
             )}
           </div>
         )}

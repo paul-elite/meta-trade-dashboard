@@ -106,13 +106,13 @@ export function WithdrawForm() {
       <Card className="max-w-lg mx-auto">
         <CardContent className="pt-6">
           <div className="text-center py-8">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 mx-auto mb-4">
-              <CheckCircle2 className="h-8 w-8 text-emerald-500" />
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-yellow-500/10 mx-auto mb-4">
+              <CheckCircle2 className="h-8 w-8 text-yellow-500" />
             </div>
-            <h3 className="text-xl font-semibold text-slate-100 mb-2">
+            <h3 className="text-xl font-semibold text-zinc-100 mb-2">
               Withdrawal {selectedMethod === 'card' ? 'Successful' : 'Submitted'}!
             </h3>
-            <p className="text-slate-400">
+            <p className="text-zinc-400">
               {selectedMethod === 'card'
                 ? 'Your funds have been sent to your card.'
                 : 'Your withdrawal is being processed and will arrive in 1-3 business days.'}
@@ -126,12 +126,12 @@ export function WithdrawForm() {
   return (
     <div className="max-w-lg mx-auto space-y-6">
       {/* Balance Card */}
-      <Card className="bg-gradient-to-br from-slate-800 to-slate-900">
+      <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950">
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-400 mb-1">Available Balance</p>
-              <p className="text-2xl font-bold text-slate-100">
+              <p className="text-sm text-zinc-400 mb-1">Available Balance</p>
+              <p className="text-2xl font-bold text-zinc-100">
                 {formatCurrency(maxWithdraw)}
               </p>
             </div>
@@ -163,7 +163,7 @@ export function WithdrawForm() {
                 setAmount(e.target.value)
                 setError('')
               }}
-              leftIcon={<span className="text-slate-400 font-medium">$</span>}
+              leftIcon={<span className="text-zinc-400 font-medium">$</span>}
               error={error}
             />
             {parseFloat(amount) > maxWithdraw && (
@@ -176,7 +176,7 @@ export function WithdrawForm() {
 
           {/* Withdraw Method */}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-3">
+            <label className="block text-sm font-medium text-zinc-300 mb-3">
               Withdraw To
             </label>
             <div className="grid grid-cols-1 gap-3">
@@ -186,16 +186,16 @@ export function WithdrawForm() {
                   onClick={() => setSelectedMethod(method.id)}
                   className={`flex items-center gap-3 p-4 rounded-lg border transition-all ${
                     selectedMethod === method.id
-                      ? 'border-emerald-500 bg-emerald-500/10'
-                      : 'border-slate-600 hover:border-slate-500 hover:bg-slate-800'
+                      ? 'border-yellow-500 bg-yellow-500/10'
+                      : 'border-zinc-700 hover:border-slate-500 hover:bg-zinc-900'
                   }`}
                 >
                   <method.icon className={`h-5 w-5 ${
-                    selectedMethod === method.id ? 'text-emerald-500' : 'text-slate-400'
+                    selectedMethod === method.id ? 'text-yellow-500' : 'text-zinc-400'
                   }`} />
                   <div className="flex-1 text-left">
                     <span className={`font-medium block ${
-                      selectedMethod === method.id ? 'text-emerald-500' : 'text-slate-300'
+                      selectedMethod === method.id ? 'text-yellow-500' : 'text-zinc-300'
                     }`}>
                       {method.name}
                     </span>

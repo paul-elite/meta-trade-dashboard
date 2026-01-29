@@ -23,7 +23,7 @@ export function UserTable({ users, isLoading }: UserTableProps) {
 
   if (users.length === 0) {
     return (
-      <div className="text-center py-12 text-slate-400">
+      <div className="text-center py-12 text-zinc-400">
         No users found
       </div>
     )
@@ -33,47 +33,47 @@ export function UserTable({ users, isLoading }: UserTableProps) {
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-slate-700/50">
-            <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+          <tr className="border-b border-zinc-800/50">
+            <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
               User
             </th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
               Email
             </th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
               Balance
             </th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
               Status
             </th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
               Joined
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-700/50">
+        <tbody className="divide-y divide-zinc-800/50">
           {users.map((user) => {
             const wallet = user.wallets?.[0]
             return (
               <tr
                 key={user.id}
                 onClick={() => router.push(`/admin/users/${user.id}`)}
-                className="hover:bg-slate-800/50 cursor-pointer transition-colors"
+                className="hover:bg-zinc-900/50 cursor-pointer transition-colors"
               >
                 <td className="px-4 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-700 text-white font-semibold">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-white font-semibold">
                       {user.full_name?.[0] || user.email[0].toUpperCase()}
                     </div>
                     <div>
                       <p className="text-sm font-medium text-white">
                         {user.full_name || 'No name'}
                       </p>
-                      <p className="text-xs text-slate-400">ID: {user.id.slice(0, 8)}...</p>
+                      <p className="text-xs text-zinc-400">ID: {user.id.slice(0, 8)}...</p>
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-4 text-sm text-slate-300">
+                <td className="px-4 py-4 text-sm text-zinc-300">
                   {user.email}
                 </td>
                 <td className="px-4 py-4">
@@ -88,7 +88,7 @@ export function UserTable({ users, isLoading }: UserTableProps) {
                     <Badge variant="success">User</Badge>
                   )}
                 </td>
-                <td className="px-4 py-4 text-sm text-slate-400">
+                <td className="px-4 py-4 text-sm text-zinc-400">
                   {formatDate(user.created_at)}
                 </td>
               </tr>

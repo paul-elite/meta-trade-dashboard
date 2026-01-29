@@ -25,10 +25,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ...props
   }, ref) => {
     const variants = {
-      primary: 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm',
-      secondary: 'bg-slate-700 hover:bg-slate-600 text-white',
-      outline: 'border border-slate-600 hover:bg-slate-800 text-slate-300',
-      ghost: 'hover:bg-slate-800 text-slate-300',
+      primary: 'bg-yellow-500 hover:bg-yellow-400 text-black font-semibold shadow-sm',
+      secondary: 'bg-zinc-800 hover:bg-zinc-700 text-white',
+      outline: 'border border-zinc-700 hover:bg-zinc-900 text-zinc-300',
+      ghost: 'hover:bg-zinc-900 text-zinc-300',
       danger: 'bg-red-500 hover:bg-red-600 text-white',
     }
 
@@ -43,7 +43,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={cn(
           'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200',
-          'focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-900',
+          'focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-zinc-950',
           'disabled:opacity-50 disabled:cursor-not-allowed',
           variants[variant],
           sizes[size],

@@ -17,8 +17,8 @@ const actions = [
     description: 'Add funds to wallet',
     href: '/deposit',
     icon: ArrowDownToLine,
-    color: 'text-emerald-500',
-    bgColor: 'bg-emerald-500/10 hover:bg-emerald-500/20',
+    color: 'text-yellow-500',
+    bgColor: 'bg-yellow-500/10 hover:bg-yellow-500/20',
   },
   {
     name: 'Withdraw',
@@ -78,8 +78,8 @@ export function QuickActions() {
             >
               <action.icon className={`h-6 w-6 ${action.color}`} />
               <div className="text-center">
-                <p className="text-sm font-medium text-slate-100">{action.name}</p>
-                <p className="text-xs text-slate-400">{action.description}</p>
+                <p className="text-sm font-medium text-zinc-100">{action.name}</p>
+                <p className="text-xs text-zinc-400">{action.description}</p>
               </div>
             </Link>
           ))}

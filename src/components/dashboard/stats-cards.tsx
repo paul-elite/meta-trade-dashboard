@@ -24,8 +24,8 @@ export function StatsCards() {
       title: 'Total Deposits',
       value: formatCurrency(stats.totalDeposits),
       icon: ArrowDownToLine,
-      color: 'text-emerald-500',
-      bgColor: 'bg-emerald-500/10',
+      color: 'text-yellow-500',
+      bgColor: 'bg-yellow-500/10',
     },
     {
       title: 'Total Withdrawals',
@@ -56,8 +56,8 @@ export function StatsCards() {
         <Card key={stat.title} className="p-5">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-400 mb-1">{stat.title}</p>
-              <p className="text-2xl font-bold text-slate-100">{stat.value}</p>
+              <p className="text-sm text-zinc-400 mb-1">{stat.title}</p>
+              <p className="text-2xl font-bold text-zinc-100">{stat.value}</p>
             </div>
             <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${stat.bgColor}`}>
               <stat.icon className={`h-5 w-5 ${stat.color}`} />

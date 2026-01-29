@@ -36,9 +36,9 @@ export function AdminSidebar() {
   }
 
   return (
-    <div className="flex h-full w-64 flex-col bg-slate-900 border-r border-slate-700/50">
+    <div className="flex h-full w-64 flex-col bg-zinc-950 border-r border-zinc-800/50">
       {/* Logo */}
-      <div className="flex h-16 items-center gap-2 px-6 border-b border-slate-700/50">
+      <div className="flex h-16 items-center gap-2 px-6 border-b border-zinc-800/50">
         <Shield className="h-8 w-8 text-red-500" />
         <span className="text-xl font-bold text-white">Admin Panel</span>
       </div>
@@ -56,7 +56,7 @@ export function AdminSidebar() {
                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                 isActive
                   ? 'bg-red-500/10 text-red-500'
-                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                  : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
               )}
             >
               <item.icon className="h-5 w-5" />
@@ -67,10 +67,10 @@ export function AdminSidebar() {
       </nav>
 
       {/* Back to Dashboard */}
-      <div className="border-t border-slate-700/50 p-3">
+      <div className="border-t border-zinc-800/50 p-3">
         <Link
           href="/dashboard"
-          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-zinc-400 hover:bg-zinc-900 hover:text-white transition-colors"
         >
           <ArrowLeft className="h-5 w-5" />
           Back to Dashboard
@@ -78,7 +78,7 @@ export function AdminSidebar() {
       </div>
 
       {/* User */}
-      <div className="border-t border-slate-700/50 p-4">
+      <div className="border-t border-zinc-800/50 p-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500/20 text-red-500 font-semibold">
             {profile?.full_name?.[0] || profile?.email?.[0] || 'A'}
@@ -87,11 +87,11 @@ export function AdminSidebar() {
             <p className="text-sm font-medium text-white truncate">
               {profile?.full_name || 'Admin'}
             </p>
-            <p className="text-xs text-slate-400 truncate">{profile?.email}</p>
+            <p className="text-xs text-zinc-400 truncate">{profile?.email}</p>
           </div>
           <button
             onClick={handleLogout}
-            className="p-2 text-slate-400 hover:text-white transition-colors"
+            className="p-2 text-zinc-400 hover:text-white transition-colors"
             title="Logout"
           >
             <LogOut className="h-5 w-5" />

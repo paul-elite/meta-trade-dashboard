@@ -45,12 +45,12 @@ export default function LoginPage() {
     <Card variant="elevated" className="w-full">
       <CardHeader className="text-center pb-2">
         <div className="flex justify-center mb-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-500/25">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-lg shadow-yellow-500/25">
             <Wallet className="h-7 w-7 text-white" />
           </div>
         </div>
-        <h1 className="text-2xl font-bold text-slate-100">Welcome Back</h1>
-        <p className="text-slate-400 mt-1">Sign in to your MetaTrade account</p>
+        <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Welcome Back</h1>
+        <p className="text-zinc-400 mt-1">Sign in to your MetaTrade account</p>
       </CardHeader>
 
       <CardContent>
@@ -82,16 +82,16 @@ export default function LoginPage() {
           />
 
           <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 text-sm text-slate-400">
+            <label className="flex items-center gap-2 text-sm text-zinc-400">
               <input
                 type="checkbox"
-                className="rounded border-slate-600 bg-slate-800 text-emerald-500 focus:ring-emerald-500"
+                className="rounded border-zinc-700 bg-zinc-900 text-yellow-500 focus:ring-yellow-500"
               />
               Remember me
             </label>
             <Link
               href="#"
-              className="text-sm text-emerald-500 hover:text-emerald-400 transition-colors"
+              className="text-sm text-yellow-500 hover:text-yellow-400 transition-colors"
             >
               Forgot password?
             </Link>
@@ -109,11 +109,11 @@ export default function LoginPage() {
       </CardContent>
 
       <CardFooter className="justify-center">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-zinc-400">
           Don&apos;t have an account?{' '}
           <Link
             href="/signup"
-            className="text-emerald-500 hover:text-emerald-400 font-medium transition-colors"
+            className="text-yellow-500 hover:text-yellow-400 font-medium transition-colors"
           >
             Sign up
           </Link>

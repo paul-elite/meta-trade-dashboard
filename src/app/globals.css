@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0f172a;
-  --foreground: #f1f5f9;
+  --background: #09090b;
+  --foreground: #fafafa;
 }
 
 @theme inline {
@@ -35,16 +35,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1e293b;
+  background: #0a0a0a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #27272a;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #3f3f46;
 }
 
 /* Form elements */
@@ -60,7 +60,7 @@ input[type="number"] {
 
 /* Focus styles */
 *:focus-visible {
-  outline: 2px solid #10b981;
+  outline: 2px solid #eab308;
   outline-offset: 2px;
 }
 
@@ -95,6 +95,6 @@ input[type="number"] {
 
 /* Selection */
 ::selection {
-  background: #10b98133;
-  color: #f1f5f9;
+  background: #eab30833;
+  color: #fafafa;
 }

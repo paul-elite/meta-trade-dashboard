@@ -80,12 +80,12 @@ export default function SignupPage() {
     <Card variant="elevated" className="w-full">
       <CardHeader className="text-center pb-2">
         <div className="flex justify-center mb-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-500/25">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-lg shadow-yellow-500/25">
             <Wallet className="h-7 w-7 text-white" />
           </div>
         </div>
-        <h1 className="text-2xl font-bold text-slate-100">Create Account</h1>
-        <p className="text-slate-400 mt-1">Start your journey with MetaTrade</p>
+        <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Create Account</h1>
+        <p className="text-zinc-400 mt-1">Start your journey with MetaTrade</p>
       </CardHeader>
 
       <CardContent>
@@ -140,15 +140,15 @@ export default function SignupPage() {
             <input
               type="checkbox"
               required
-              className="mt-1 rounded border-slate-600 bg-slate-800 text-emerald-500 focus:ring-emerald-500"
+              className="mt-1 rounded border-zinc-700 bg-zinc-900 text-yellow-500 focus:ring-yellow-500"
             />
-            <label className="text-sm text-slate-400">
+            <label className="text-sm text-zinc-400">
               I agree to the{' '}
-              <Link href="#" className="text-emerald-500 hover:text-emerald-400">
+              <Link href="#" className="text-yellow-500 hover:text-yellow-400">
                 Terms of Service
               </Link>{' '}
               and{' '}
-              <Link href="#" className="text-emerald-500 hover:text-emerald-400">
+              <Link href="#" className="text-yellow-500 hover:text-yellow-400">
                 Privacy Policy
               </Link>
             </label>
@@ -166,11 +166,11 @@ export default function SignupPage() {
       </CardContent>
 
       <CardFooter className="justify-center">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-zinc-400">
           Already have an account?{' '}
           <Link
             href="/login"
-            className="text-emerald-500 hover:text-emerald-400 font-medium transition-colors"
+            className="text-yellow-500 hover:text-yellow-400 font-medium transition-colors"
           >
             Sign in
           </Link>

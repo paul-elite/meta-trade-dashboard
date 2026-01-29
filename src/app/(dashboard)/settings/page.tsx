@@ -86,7 +86,7 @@ export default function SettingsPage() {
         {/* Message */}
         {message.text && (
           <div className={`flex items-center gap-2 p-4 rounded-lg ${
-            message.type === 'success' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'
+            message.type === 'success' ? 'bg-yellow-500/10 text-yellow-500' : 'bg-red-500/10 text-red-500'
           }`}>
             <CheckCircle2 className="h-5 w-5" />
             {message.text}
@@ -97,8 +97,8 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
-                <User className="h-5 w-5 text-emerald-500" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-yellow-500/10">
+                <User className="h-5 w-5 text-yellow-500" />
               </div>
               <div>
                 <CardTitle>Profile Information</CardTitle>
@@ -111,7 +111,7 @@ export default function SettingsPage() {
               label="Email"
               value={profile?.email || ''}
               disabled
-              className="bg-slate-700/50"
+              className="bg-zinc-800/50"
             />
             <Input
               label="Full Name"
@@ -186,14 +186,14 @@ export default function SettingsPage() {
                 { label: 'Security alerts', description: 'Get notified for login attempts' },
                 { label: 'Marketing emails', description: 'Receive promotional emails' },
               ].map((item) => (
-                <div key={item.label} className="flex items-center justify-between p-3 rounded-lg bg-slate-800/50">
+                <div key={item.label} className="flex items-center justify-between p-3 rounded-lg bg-zinc-900/50">
                   <div>
-                    <p className="text-sm font-medium text-slate-100">{item.label}</p>
-                    <p className="text-xs text-slate-400">{item.description}</p>
+                    <p className="text-sm font-medium text-zinc-100">{item.label}</p>
+                    <p className="text-xs text-zinc-400">{item.description}</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" defaultChecked className="sr-only peer" />
-                    <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-emerald-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                    <div className="w-11 h-6 bg-zinc-800 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-yellow-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"></div>
                   </label>
                 </div>
               ))}
@@ -215,10 +215,10 @@ export default function SettingsPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50">
+            <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
               <div>
-                <p className="text-sm font-medium text-slate-100">2FA Status</p>
-                <p className="text-xs text-slate-400">Not enabled</p>
+                <p className="text-sm font-medium text-zinc-100">2FA Status</p>
+                <p className="text-xs text-zinc-400">Not enabled</p>
               </div>
               <Button variant="outline">Enable 2FA</Button>
             </div>

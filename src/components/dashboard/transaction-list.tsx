@@ -38,7 +38,7 @@ export function TransactionList({ transactions, limit, showViewAll = true }: Tra
         {showViewAll && transactions.length > 0 && (
           <Link
             href="/transactions"
-            className="text-sm text-emerald-500 hover:text-emerald-400 transition-colors"
+            className="text-sm text-yellow-500 hover:text-yellow-400 transition-colors"
           >
             View All
           </Link>
@@ -47,10 +47,10 @@ export function TransactionList({ transactions, limit, showViewAll = true }: Tra
       <CardContent>
         {displayTransactions.length === 0 ? (
           <div className="text-center py-8">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700/50 mx-auto mb-3">
-              <RefreshCw className="h-6 w-6 text-slate-400" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800/50 mx-auto mb-3">
+              <RefreshCw className="h-6 w-6 text-zinc-400" />
             </div>
-            <p className="text-slate-400">No transactions yet</p>
+            <p className="text-zinc-400">No transactions yet</p>
             <p className="text-sm text-slate-500 mt-1">
               Your transaction history will appear here
             </p>
@@ -62,20 +62,20 @@ export function TransactionList({ transactions, limit, showViewAll = true }: Tra
               return (
                 <div
                   key={transaction.id}
-                  className="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-900 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                      transaction.type === 'deposit' ? 'bg-emerald-500/10' :
+                      transaction.type === 'deposit' ? 'bg-yellow-500/10' :
                       transaction.type === 'withdraw' ? 'bg-red-500/10' : 'bg-blue-500/10'
                     }`}>
                       <Icon className={`h-5 w-5 ${getTransactionTypeColor(transaction.type)}`} />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-slate-100 capitalize">
+                      <p className="text-sm font-medium text-zinc-100 capitalize">
                         {transaction.type}
                       </p>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs text-zinc-400">
                         {formatDate(transaction.created_at)}
                       </p>
                     </div>

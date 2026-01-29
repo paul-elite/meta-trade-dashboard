@@ -89,7 +89,7 @@ export default function TransactionsPage() {
           <CardHeader>
             <CardTitle>
               Transaction History
-              <span className="ml-2 text-sm font-normal text-slate-400">
+              <span className="ml-2 text-sm font-normal text-zinc-400">
                 ({filteredTransactions.length} transactions)
               </span>
             </CardTitle>
@@ -97,10 +97,10 @@ export default function TransactionsPage() {
           <CardContent>
             {filteredTransactions.length === 0 ? (
               <div className="text-center py-12">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700/50 mx-auto mb-3">
-                  <RefreshCw className="h-6 w-6 text-slate-400" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800/50 mx-auto mb-3">
+                  <RefreshCw className="h-6 w-6 text-zinc-400" />
                 </div>
-                <p className="text-slate-400">No transactions found</p>
+                <p className="text-zinc-400">No transactions found</p>
                 <p className="text-sm text-slate-500 mt-1">
                   {searchQuery || typeFilter !== 'all' || statusFilter !== 'all'
                     ? 'Try adjusting your filters'
@@ -111,13 +111,13 @@ export default function TransactionsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-slate-700">
-                      <th className="pb-3 text-left text-sm font-medium text-slate-400">Type</th>
-                      <th className="pb-3 text-left text-sm font-medium text-slate-400">Description</th>
-                      <th className="pb-3 text-left text-sm font-medium text-slate-400">Reference</th>
-                      <th className="pb-3 text-left text-sm font-medium text-slate-400">Date</th>
-                      <th className="pb-3 text-left text-sm font-medium text-slate-400">Status</th>
-                      <th className="pb-3 text-right text-sm font-medium text-slate-400">Amount</th>
+                    <tr className="border-b border-zinc-800">
+                      <th className="pb-3 text-left text-sm font-medium text-zinc-400">Type</th>
+                      <th className="pb-3 text-left text-sm font-medium text-zinc-400">Description</th>
+                      <th className="pb-3 text-left text-sm font-medium text-zinc-400">Reference</th>
+                      <th className="pb-3 text-left text-sm font-medium text-zinc-400">Date</th>
+                      <th className="pb-3 text-left text-sm font-medium text-zinc-400">Status</th>
+                      <th className="pb-3 text-right text-sm font-medium text-zinc-400">Amount</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -126,30 +126,30 @@ export default function TransactionsPage() {
                       return (
                         <tr
                           key={transaction.id}
-                          className="border-b border-slate-700/50 hover:bg-slate-800/50 transition-colors"
+                          className="border-b border-zinc-800/50 hover:bg-zinc-900/50 transition-colors"
                         >
                           <td className="py-4">
                             <div className="flex items-center gap-3">
                               <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${
-                                transaction.type === 'deposit' ? 'bg-emerald-500/10' :
+                                transaction.type === 'deposit' ? 'bg-yellow-500/10' :
                                 transaction.type === 'withdraw' ? 'bg-red-500/10' : 'bg-blue-500/10'
                               }`}>
                                 <Icon className={`h-4 w-4 ${getTransactionTypeColor(transaction.type)}`} />
                               </div>
-                              <span className="text-sm font-medium text-slate-100 capitalize">
+                              <span className="text-sm font-medium text-zinc-100 capitalize">
                                 {transaction.type}
                               </span>
                             </div>
                           </td>
-                          <td className="py-4 text-sm text-slate-300">
+                          <td className="py-4 text-sm text-zinc-300">
                             {transaction.description || '-'}
                           </td>
                           <td className="py-4">
-                            <code className="text-xs text-slate-400 bg-slate-800 px-2 py-1 rounded">
+                            <code className="text-xs text-zinc-400 bg-zinc-900 px-2 py-1 rounded">
                               {transaction.reference || '-'}
                             </code>
                           </td>
-                          <td className="py-4 text-sm text-slate-400">
+                          <td className="py-4 text-sm text-zinc-400">
                             {formatDate(transaction.created_at)}
                           </td>
                           <td className="py-4">

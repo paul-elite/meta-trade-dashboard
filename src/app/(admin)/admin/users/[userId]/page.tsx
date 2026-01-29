@@ -62,7 +62,7 @@ export default function UserDetailPage() {
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-slate-400">User not found</p>
+        <p className="text-zinc-400">User not found</p>
       </div>
     )
   }
@@ -94,7 +94,7 @@ export default function UserDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="flex items-start gap-6">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-slate-700 text-white text-2xl font-bold">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-zinc-800 text-white text-2xl font-bold">
                   {user.full_name?.[0] || user.email[0].toUpperCase()}
                 </div>
                 <div className="flex-1 space-y-4">
@@ -112,19 +112,19 @@ export default function UserDetailPage() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-2 text-slate-400">
+                    <div className="flex items-center gap-2 text-zinc-400">
                       <Mail className="h-4 w-4" />
                       <span>{user.email}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-slate-400">
+                    <div className="flex items-center gap-2 text-zinc-400">
                       <User className="h-4 w-4" />
                       <span>ID: {user.id.slice(0, 12)}...</span>
                     </div>
-                    <div className="flex items-center gap-2 text-slate-400">
+                    <div className="flex items-center gap-2 text-zinc-400">
                       <Calendar className="h-4 w-4" />
                       <span>Joined {formatDate(user.created_at)}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-slate-400">
+                    <div className="flex items-center gap-2 text-zinc-400">
                       <Wallet className="h-4 w-4" />
                       <span className="text-white font-semibold">
                         {wallet ? formatCurrency(wallet.balance, wallet.currency) : '$0.00'}
@@ -153,38 +153,38 @@ export default function UserDetailPage() {
           </CardHeader>
           <CardContent className="p-0">
             {transactions.length === 0 ? (
-              <p className="text-center py-8 text-slate-400">No transactions yet</p>
+              <p className="text-center py-8 text-zinc-400">No transactions yet</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-slate-700/50">
-                      <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
+                    <tr className="border-b border-zinc-800/50">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
                         Type
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
                         Description
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
                         Status
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
                         Date
                       </th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-slate-400 uppercase">
+                      <th className="px-4 py-3 text-right text-xs font-medium text-zinc-400 uppercase">
                         Amount
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-700/50">
+                  <tbody className="divide-y divide-zinc-800/50">
                     {transactions.map((tx) => (
-                      <tr key={tx.id} className="hover:bg-slate-800/50">
+                      <tr key={tx.id} className="hover:bg-zinc-900/50">
                         <td className="px-4 py-3">
                           <Badge className={getTransactionTypeColor(tx.type)}>
                             {tx.type.replace('_', ' ')}
                           </Badge>
                         </td>
-                        <td className="px-4 py-3 text-sm text-slate-300">
+                        <td className="px-4 py-3 text-sm text-zinc-300">
                           {tx.description || '-'}
                         </td>
                         <td className="px-4 py-3">
@@ -192,12 +192,12 @@ export default function UserDetailPage() {
                             {tx.status}
                           </Badge>
                         </td>
-                        <td className="px-4 py-3 text-sm text-slate-400">
+                        <td className="px-4 py-3 text-sm text-zinc-400">
                           {formatDate(tx.created_at)}
                         </td>
                         <td className={`px-4 py-3 text-sm text-right font-medium ${
                           tx.type.includes('credit') || tx.type === 'deposit'
-                            ? 'text-emerald-500'
+                            ? 'text-yellow-500'
                             : 'text-red-500'
                         }`}>
                           {tx.type.includes('credit') || tx.type === 'deposit' ? '+' : '-'}

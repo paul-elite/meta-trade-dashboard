@@ -93,8 +93,8 @@ export function WalletActions({ userId, currentBalance, onSuccess }: WalletActio
               onClick={() => setActionType('credit')}
               className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-medium transition-colors ${
                 actionType === 'credit'
-                  ? 'bg-emerald-500 text-white'
-                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                  ? 'bg-yellow-500 text-white'
+                  : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
               }`}
             >
               <Plus className="h-4 w-4" />
@@ -105,7 +105,7 @@ export function WalletActions({ userId, currentBalance, onSuccess }: WalletActio
               className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-medium transition-colors ${
                 actionType === 'debit'
                   ? 'bg-red-500 text-white'
-                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                  : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
               }`}
             >
               <Minus className="h-4 w-4" />
@@ -137,7 +137,7 @@ export function WalletActions({ userId, currentBalance, onSuccess }: WalletActio
             <p className="text-sm text-red-500">{error}</p>
           )}
           {success && (
-            <p className="text-sm text-emerald-500">{success}</p>
+            <p className="text-sm text-yellow-500">{success}</p>
           )}
 
           {/* Submit Button */}
@@ -159,15 +159,15 @@ export function WalletActions({ userId, currentBalance, onSuccess }: WalletActio
         title="Confirm Action"
       >
         <div className="space-y-4">
-          <p className="text-slate-300">
+          <p className="text-zinc-300">
             Are you sure you want to{' '}
-            <span className={actionType === 'credit' ? 'text-emerald-500' : 'text-red-500'}>
+            <span className={actionType === 'credit' ? 'text-yellow-500' : 'text-red-500'}>
               {actionType}
             </span>{' '}
             <span className="font-bold text-white">${parseFloat(amount || '0').toFixed(2)}</span>{' '}
             {actionType === 'credit' ? 'to' : 'from'} this user's wallet?
           </p>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-zinc-400">
             Reason: {description}
           </p>
           <div className="flex gap-3 pt-2">

@@ -43,7 +43,7 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
 
   if (isAdmin === null) {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-900">
+      <div className="flex h-screen items-center justify-center bg-zinc-950">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-red-500 border-t-transparent" />
       </div>
     )
@@ -60,7 +60,7 @@ export default function AdminLayout({
   return (
     <AuthProvider>
       <AdminGuard>
-        <div className="flex h-screen bg-slate-900">
+        <div className="flex h-screen bg-zinc-950">
           <AdminSidebar />
           <main className="flex-1 overflow-auto">
             {children}

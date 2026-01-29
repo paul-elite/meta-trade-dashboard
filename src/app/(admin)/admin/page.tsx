@@ -84,8 +84,8 @@ export default function AdminDashboard() {
       title: 'Total Balance',
       value: formatCurrency(stats.totalBalance, 'USD'),
       icon: Wallet,
-      color: 'text-emerald-500',
-      bgColor: 'bg-emerald-500/10'
+      color: 'text-yellow-500',
+      bgColor: 'bg-yellow-500/10'
     },
     {
       title: 'Total Transactions',
@@ -118,7 +118,7 @@ export default function AdminDashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-slate-400">{stat.title}</p>
+                    <p className="text-sm text-zinc-400">{stat.title}</p>
                     <p className="text-2xl font-bold text-white mt-1">
                       {isLoading ? '...' : stat.value}
                     </p>
@@ -141,32 +141,32 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Link
                 href="/admin/users"
-                className="flex items-center gap-3 p-4 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors"
+                className="flex items-center gap-3 p-4 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors"
               >
                 <Users className="h-5 w-5 text-blue-500" />
                 <div>
                   <p className="font-medium text-white">Manage Users</p>
-                  <p className="text-sm text-slate-400">View and manage all users</p>
+                  <p className="text-sm text-zinc-400">View and manage all users</p>
                 </div>
               </Link>
               <Link
                 href="/admin/users"
-                className="flex items-center gap-3 p-4 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors"
+                className="flex items-center gap-3 p-4 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors"
               >
-                <Wallet className="h-5 w-5 text-emerald-500" />
+                <Wallet className="h-5 w-5 text-yellow-500" />
                 <div>
                   <p className="font-medium text-white">Credit/Debit Wallets</p>
-                  <p className="text-sm text-slate-400">Adjust user balances</p>
+                  <p className="text-sm text-zinc-400">Adjust user balances</p>
                 </div>
               </Link>
               <Link
                 href="/dashboard"
-                className="flex items-center gap-3 p-4 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors"
+                className="flex items-center gap-3 p-4 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors"
               >
                 <Activity className="h-5 w-5 text-purple-500" />
                 <div>
                   <p className="font-medium text-white">User Dashboard</p>
-                  <p className="text-sm text-slate-400">Return to user view</p>
+                  <p className="text-sm text-zinc-400">Return to user view</p>
                 </div>
               </Link>
             </div>
