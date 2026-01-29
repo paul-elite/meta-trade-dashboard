@@ -9,6 +9,7 @@ import { useStore } from '@/store/useStore'
 import { generateReference } from '@/lib/utils'
 import { CheckCircle2, Copy, Check, Loader2, Wallet, AlertCircle } from 'lucide-react'
 import type { CryptoOption } from '@/types/database'
+import QRCode from 'react-qr-code'
 
 export function DepositForm() {
   const [amount, setAmount] = useState('')
@@ -204,12 +205,24 @@ export function DepositForm() {
           {selectedCrypto && (
             <>
               {/* Wallet Address Display */}
-              <div className="bg-zinc-950 p-5 rounded-xl border border-zinc-800 space-y-3">
+              <div className="bg-zinc-950 p-5 rounded-xl border border-zinc-800 space-y-5">
                 <div className="flex justify-between items-start">
                   <span className="text-xs text-zinc-500 font-medium uppercase tracking-wider">
                     Deposit Address ({selectedCrypto.network})
                   </span>
                 </div>
+
+                <div className="flex justify-center py-2">
+                  <div className="bg-white p-3 rounded-xl">
+                    <QRCode
+                      value={selectedCrypto.wallet_address}
+                      size={160}
+                      className="h-auto max-w-full"
+                      viewBox={`0 0 160 160`}
+                    />
+                  </div>
+                </div>
+
                 <div className="flex items-center gap-3">
                   <code className="flex-1 text-sm text-zinc-300 break-all font-mono bg-zinc-900/50 p-3 rounded-lg border border-zinc-800/50">
                     {selectedCrypto.wallet_address}

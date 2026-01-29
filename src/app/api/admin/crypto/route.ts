@@ -62,7 +62,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { name, symbol, wallet_address, network, icon_url, is_enabled, min_deposit } = body
 
-    if (!name || !symbol || !wallet_address || !network) {
+    if (!name || !symbol || !network) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
