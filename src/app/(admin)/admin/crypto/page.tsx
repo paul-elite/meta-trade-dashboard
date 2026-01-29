@@ -104,7 +104,11 @@ export default function AdminCryptoPage() {
       for (const res of results) {
         if (!res.ok) {
           const data = await res.json().catch(() => ({}))
-          throw new Error(data.details || data.error || 'Failed to save changes')
+          const errorMessage = typeof data.details === 'object'
+            ? JSON.stringify(data.details)
+            : (data.details || data.error || 'Failed to save changes')
+
+          throw new Error(errorMessage)
         }
       }
 

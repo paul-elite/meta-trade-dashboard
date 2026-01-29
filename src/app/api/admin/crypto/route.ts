@@ -90,6 +90,9 @@ export async function POST(request: Request) {
     return NextResponse.json(cryptoOption)
   } catch (error) {
     console.error('Error creating crypto option:', error)
-    return NextResponse.json({ error: 'Failed to create crypto option', details: String(error) }, { status: 500 })
+    return NextResponse.json({
+      error: 'Failed to create crypto option',
+      details: error instanceof Error ? error.message : JSON.stringify(error)
+    }, { status: 500 })
   }
 }
