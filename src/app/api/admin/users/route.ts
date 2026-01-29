@@ -38,16 +38,16 @@ export async function GET(request: Request) {
     const limit = parseInt(url.searchParams.get('limit') || '20')
     const search = url.searchParams.get('search') || ''
 
-    // Fetch users with wallets using admin client (bypasses RLS)
+    // Fetch users
     let query = adminClient
       .from('profiles')
-      .select(`*, wallets(*)`, { count: 'exact' })
+      .select('*', { count: 'exact' })
 
     if (search) {
       query = query.or(`email.ilike.%${search}%,full_name.ilike.%${search}%`)
     }
 
-    const { data, count, error } = await query
+    const { data: profiles, count, error } = await query
       .order('created_at', { ascending: false })
       .range((page - 1) * limit, page * limit - 1)
 
@@ -59,7 +59,21 @@ export async function GET(request: Request) {
       }, { status: 500 })
     }
 
-    return NextResponse.json({ users: data || [], total: count || 0, page, limit })
+    // Fetch wallets for these users
+    const userIds = profiles?.map(p => p.id) || []
+    const { data: wallets } = await adminClient
+      .from('wallets')
+      .select('*')
+      .in('user_id', userIds)
+
+    // Combine profiles with their wallets
+    const walletsMap = new Map(wallets?.map(w => [w.user_id, w]) || [])
+    const usersWithWallets = profiles?.map(p => ({
+      ...p,
+      wallets: walletsMap.get(p.id) ? [walletsMap.get(p.id)] : []
+    })) || []
+
+    return NextResponse.json({ users: usersWithWallets, total: count || 0, page, limit })
   } catch (err: unknown) {
     const error = err as Error
     console.error('API Error:', error)

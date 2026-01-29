@@ -29,19 +29,25 @@ export async function GET(
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  // Fetch user profile with wallet
+  // Fetch user profile
   const { data: profile, error: profileError } = await adminClient
     .from('profiles')
-    .select(`
-      *,
-      wallets (*)
-    `)
+    .select('*')
     .eq('id', userId)
     .single()
 
   if (profileError || !profile) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 })
   }
+
+  // Fetch user's wallet separately
+  const { data: wallets } = await adminClient
+    .from('wallets')
+    .select('*')
+    .eq('user_id', userId)
+
+  // Add wallets to profile
+  const profileWithWallet = { ...profile, wallets: wallets || [] }
 
   // Fetch user transactions
   const { data: transactions, error: txError } = await adminClient
@@ -63,5 +69,5 @@ export async function GET(
     details: { action: 'view_user_detail' }
   })
 
-  return NextResponse.json({ user: profile, transactions })
+  return NextResponse.json({ user: profileWithWallet, transactions })
 }
