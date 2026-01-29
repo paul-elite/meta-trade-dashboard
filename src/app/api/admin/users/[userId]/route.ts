@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export async function GET(
@@ -14,8 +15,22 @@ export async function GET(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  // Use admin client for admin operations
+  const adminClient = createAdminClient()
+
+  // Check if admin
+  const { data: adminProfile } = await adminClient
+    .from('profiles')
+    .select('is_admin')
+    .eq('id', user.id)
+    .single()
+
+  if (!adminProfile?.is_admin) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   // Fetch user profile with wallet
-  const { data: profile, error: profileError } = await supabase
+  const { data: profile, error: profileError } = await adminClient
     .from('profiles')
     .select(`
       *,
@@ -29,7 +44,7 @@ export async function GET(
   }
 
   // Fetch user transactions
-  const { data: transactions, error: txError } = await supabase
+  const { data: transactions, error: txError } = await adminClient
     .from('transactions')
     .select('*')
     .eq('user_id', userId)
@@ -41,7 +56,7 @@ export async function GET(
   }
 
   // Log admin view action
-  await supabase.from('admin_audit_logs').insert({
+  await adminClient.from('admin_audit_logs').insert({
     admin_id: user.id,
     action_type: 'profile_view',
     target_user_id: userId,

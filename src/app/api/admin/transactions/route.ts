@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
@@ -13,8 +14,11 @@ export async function GET() {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
+        // Use admin client for admin operations
+        const adminClient = createAdminClient()
+
         // Check if admin
-        const { data: profile } = await supabase
+        const { data: profile } = await adminClient
             .from('profiles')
             .select('is_admin')
             .eq('id', user.id)
@@ -25,7 +29,7 @@ export async function GET() {
         }
 
         // Fetch all transactions
-        const { data: transactions, error: txError } = await supabase
+        const { data: transactions, error: txError } = await adminClient
             .from('transactions')
             .select('*')
             .order('created_at', { ascending: false })
@@ -36,7 +40,7 @@ export async function GET() {
         const userIds = [...new Set(transactions?.map(t => t.user_id) || [])]
 
         // Fetch profiles for those users
-        const { data: profiles, error: profileError } = await supabase
+        const { data: profiles, error: profileError } = await adminClient
             .from('profiles')
             .select('id, email, full_name')
             .in('id', userIds)

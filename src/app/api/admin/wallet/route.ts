@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 import { generateReference } from '@/lib/utils'
 
@@ -9,6 +10,20 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  // Use admin client for admin operations
+  const adminClient = createAdminClient()
+
+  // Check if admin
+  const { data: adminProfile } = await adminClient
+    .from('profiles')
+    .select('is_admin')
+    .eq('id', user.id)
+    .single()
+
+  if (!adminProfile?.is_admin) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
   const body = await request.json()
@@ -29,7 +44,7 @@ export async function POST(request: Request) {
   }
 
   // Get current wallet balance
-  const { data: wallet, error: walletError } = await supabase
+  const { data: wallet, error: walletError } = await adminClient
     .from('wallets')
     .select('*')
     .eq('user_id', userId)
@@ -49,7 +64,7 @@ export async function POST(request: Request) {
     : wallet.balance - numAmount
 
   // Update wallet
-  const { error: updateError } = await supabase
+  const { error: updateError } = await adminClient
     .from('wallets')
     .update({ balance: newBalance })
     .eq('id', wallet.id)
@@ -60,7 +75,7 @@ export async function POST(request: Request) {
 
   // Create transaction record
   const transactionType = type === 'credit' ? 'admin_credit' : 'admin_debit'
-  const { error: txError } = await supabase
+  const { error: txError } = await adminClient
     .from('transactions')
     .insert({
       user_id: userId,
@@ -76,7 +91,7 @@ export async function POST(request: Request) {
   }
 
   // Audit log
-  await supabase.from('admin_audit_logs').insert({
+  await adminClient.from('admin_audit_logs').insert({
     admin_id: user.id,
     action_type: type,
     target_user_id: userId,

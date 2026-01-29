@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
@@ -17,8 +18,11 @@ export async function PUT(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
+        // Use admin client for admin operations
+        const adminClient = createAdminClient()
+
         // Check if admin
-        const { data: profile } = await supabase
+        const { data: profile } = await adminClient
             .from('profiles')
             .select('is_admin')
             .eq('id', user.id)
@@ -36,7 +40,7 @@ export async function PUT(
         }
 
         // Fetch the transaction first
-        const { data: transaction, error: fetchError } = await supabase
+        const { data: transaction, error: fetchError } = await adminClient
             .from('transactions')
             .select('*')
             .eq('id', id)
@@ -49,7 +53,7 @@ export async function PUT(
         // If approving a deposit, credit the user's wallet
         if (status === 'completed' && transaction.type === 'deposit' && transaction.status === 'pending') {
             // Get user's wallet
-            const { data: wallet, error: walletError } = await supabase
+            const { data: wallet, error: walletError } = await adminClient
                 .from('wallets')
                 .select('*')
                 .eq('user_id', transaction.user_id)
@@ -60,7 +64,7 @@ export async function PUT(
             }
 
             // Update wallet balance
-            const { error: updateWalletError } = await supabase
+            const { error: updateWalletError } = await adminClient
                 .from('wallets')
                 .update({ balance: wallet.balance + transaction.amount })
                 .eq('id', wallet.id)
@@ -72,7 +76,7 @@ export async function PUT(
         }
 
         // Update transaction status
-        const { data: updatedTransaction, error: updateError } = await supabase
+        const { data: updatedTransaction, error: updateError } = await adminClient
             .from('transactions')
             .update({ status })
             .eq('id', id)
@@ -82,7 +86,7 @@ export async function PUT(
         if (updateError) throw updateError
 
         // Log the action
-        await supabase.from('admin_audit_logs').insert({
+        await adminClient.from('admin_audit_logs').insert({
             admin_id: user.id,
             action_type: status === 'completed' ? 'credit' : 'debit',
             target_user_id: transaction.user_id,

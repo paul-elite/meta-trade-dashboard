@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
@@ -13,12 +14,19 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Check if admin
-    const { data: profile } = await supabase
+    // Use admin client (bypasses RLS) to check admin status
+    const adminClient = createAdminClient()
+
+    const { data: profile, error: profileError } = await adminClient
       .from('profiles')
       .select('is_admin')
       .eq('id', user.id)
       .single()
+
+    if (profileError) {
+      console.error('Error checking admin status:', profileError)
+      return NextResponse.json({ error: 'Failed to verify admin status' }, { status: 500 })
+    }
 
     if (!profile?.is_admin) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
@@ -30,8 +38,8 @@ export async function GET(request: Request) {
     const limit = parseInt(url.searchParams.get('limit') || '20')
     const search = url.searchParams.get('search') || ''
 
-    // Fetch users with wallets
-    let query = supabase
+    // Fetch users with wallets using admin client (bypasses RLS)
+    let query = adminClient
       .from('profiles')
       .select(`*, wallets(*)`, { count: 'exact' })
 
