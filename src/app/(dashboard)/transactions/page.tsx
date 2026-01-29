@@ -44,11 +44,11 @@ export default function TransactionsPage() {
     <div className="min-h-full">
       <Header title="Transactions" description="View your transaction history" />
 
-      <div className="p-4 lg:p-8 space-y-6">
+      <div className="p-6 lg:p-12 space-y-8">
         {/* Filters */}
         <Card>
           <CardContent className="pt-6">
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-8">
               <div className="flex-1">
                 <Input
                   placeholder="Search by reference or description..."
@@ -57,7 +57,7 @@ export default function TransactionsPage() {
                   leftIcon={<Search className="h-4 w-4" />}
                 />
               </div>
-              <div className="flex gap-4">
+              <div className="flex gap-8">
                 <Select
                   value={typeFilter}
                   onChange={(e) => setTypeFilter(e.target.value)}

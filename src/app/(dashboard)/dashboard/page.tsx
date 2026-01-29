@@ -23,9 +23,9 @@ export default function DashboardPage() {
     <div className="min-h-full">
       <Header title="Dashboard" description="Welcome back! Here's your wallet overview." />
 
-      <div className="p-4 lg:p-8 space-y-6">
+      <div className="p-6 lg:p-12 space-y-8">
         {/* Wallet and Quick Actions */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
             <WalletCard />
           </div>
@@ -38,7 +38,7 @@ export default function DashboardPage() {
         <StatsCards />
 
         {/* Chart and Transactions */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <BalanceChart />
           <TransactionList transactions={transactions} limit={5} />
         </div>

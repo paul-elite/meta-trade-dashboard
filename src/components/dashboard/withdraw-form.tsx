@@ -124,7 +124,7 @@ export function WithdrawForm() {
   }
 
   return (
-    <div className="max-w-lg mx-auto space-y-6">
+    <div className="max-w-lg mx-auto space-y-8">
       {/* Balance Card */}
       <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950">
         <CardContent className="pt-6">
@@ -151,7 +151,7 @@ export function WithdrawForm() {
           <CardTitle>Withdraw Funds</CardTitle>
           <CardDescription>Transfer money to your bank or card</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-8">
           {/* Amount Input */}
           <div>
             <Input

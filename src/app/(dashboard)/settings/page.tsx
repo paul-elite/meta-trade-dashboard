@@ -82,7 +82,7 @@ export default function SettingsPage() {
     <div className="min-h-full">
       <Header title="Settings" description="Manage your account settings" />
 
-      <div className="p-4 lg:p-8 max-w-3xl space-y-6">
+      <div className="p-6 lg:p-12 max-w-3xl space-y-8">
         {/* Message */}
         {message.text && (
           <div className={`flex items-center gap-2 p-4 rounded-lg ${

@@ -8,7 +8,7 @@ export default function DepositPage() {
     <div className="min-h-full">
       <Header title="Deposit" description="Add funds to your wallet" />
 
-      <div className="p-4 lg:p-8">
+      <div className="p-6 lg:p-12">
         <DepositForm />
       </div>
     </div>

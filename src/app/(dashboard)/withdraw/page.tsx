@@ -8,7 +8,7 @@ export default function WithdrawPage() {
     <div className="min-h-full">
       <Header title="Withdraw" description="Transfer funds to your bank or card" />
 
-      <div className="p-4 lg:p-8">
+      <div className="p-6 lg:p-12">
         <WithdrawForm />
       </div>
     </div>

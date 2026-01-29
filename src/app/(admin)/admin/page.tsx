@@ -110,9 +110,9 @@ export default function AdminDashboard() {
         description="Overview of platform statistics"
       />
 
-      <div className="p-6 space-y-6">
+      <div className="p-8 space-y-8">
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {statCards.map((stat) => (
             <Card key={stat.title}>
               <CardContent className="p-6">
@@ -138,7 +138,7 @@ export default function AdminDashboard() {
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <Link
                 href="/admin/users"
                 className="flex items-center gap-3 p-4 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors"

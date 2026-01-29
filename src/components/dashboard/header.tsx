@@ -14,7 +14,7 @@ export function Header({ title, description }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-30 border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-md">
-      <div className="flex h-16 items-center justify-between px-4 lg:px-8">
+      <div className="flex h-20 items-center justify-between px-6 lg:px-10">
         <div className="lg:ml-0 ml-12">
           <h1 className="text-xl font-semibold text-zinc-100 tracking-tight">{title}</h1>
           {description && (
@@ -22,7 +22,7 @@ export function Header({ title, description }: HeaderProps) {
           )}
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-8">
           {/* Balance display */}
           <div className="hidden sm:flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2">
             <span className="text-sm text-zinc-400">Balance:</span>

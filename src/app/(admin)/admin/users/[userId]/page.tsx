@@ -76,7 +76,7 @@ export default function UserDetailPage() {
         description={user.email}
       />
 
-      <div className="p-6 space-y-6">
+      <div className="p-8 space-y-8">
         {/* Back Button */}
         <Button
           variant="ghost"
@@ -86,14 +86,14 @@ export default function UserDetailPage() {
           Back to Users
         </Button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* User Profile Card */}
           <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle>Profile Information</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-start gap-6">
+              <div className="flex items-start gap-8">
                 <div className="flex h-20 w-20 items-center justify-center rounded-full bg-zinc-800 text-white text-2xl font-bold">
                   {user.full_name?.[0] || user.email[0].toUpperCase()}
                 </div>
@@ -111,7 +111,7 @@ export default function UserDetailPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="flex items-center gap-2 text-zinc-400">
                       <Mail className="h-4 w-4" />
                       <span>{user.email}</span>

@@ -36,15 +36,15 @@ export function AdminSidebar() {
   }
 
   return (
-    <div className="flex h-full w-64 flex-col bg-zinc-950 border-r border-zinc-800/50">
+    <div className="flex h-full w-72 flex-col bg-zinc-950 border-r border-zinc-800/50">
       {/* Logo */}
-      <div className="flex h-16 items-center gap-2 px-6 border-b border-zinc-800/50">
+      <div className="flex h-20 items-center gap-4 px-8 border-b border-zinc-800/50">
         <Shield className="h-8 w-8 text-red-500" />
-        <span className="text-xl font-bold text-white">Admin Panel</span>
+        <span className="text-xl font-bold text-white tracking-tight">Admin Panel</span>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 px-3 py-4">
+      <nav className="flex-1 space-y-2 px-4 py-6">
         {navigation.map((item) => {
           const isActive = pathname === item.href ||
             (item.href !== '/admin' && pathname.startsWith(item.href))
@@ -53,7 +53,7 @@ export function AdminSidebar() {
               key={item.name}
               href={item.href}
               className={cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                'flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium transition-colors',
                 isActive
                   ? 'bg-red-500/10 text-red-500'
                   : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
@@ -67,10 +67,10 @@ export function AdminSidebar() {
       </nav>
 
       {/* Back to Dashboard */}
-      <div className="border-t border-zinc-800/50 p-3">
+      <div className="border-t border-zinc-800/50 p-4">
         <Link
           href="/dashboard"
-          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-zinc-400 hover:bg-zinc-900 hover:text-white transition-colors"
+          className="flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium text-zinc-400 hover:bg-zinc-900 hover:text-white transition-colors"
         >
           <ArrowLeft className="h-5 w-5" />
           Back to Dashboard
@@ -78,9 +78,9 @@ export function AdminSidebar() {
       </div>
 
       {/* User */}
-      <div className="border-t border-zinc-800/50 p-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500/20 text-red-500 font-semibold">
+      <div className="border-t border-zinc-800/50 p-6">
+        <div className="flex items-center gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-500/20 text-red-500 font-semibold">
             {profile?.full_name?.[0] || profile?.email?.[0] || 'A'}
           </div>
           <div className="flex-1 min-w-0">

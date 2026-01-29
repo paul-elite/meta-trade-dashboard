@@ -104,13 +104,13 @@ export function DepositForm() {
   }
 
   return (
-    <div className="max-w-lg mx-auto space-y-6">
+    <div className="max-w-lg mx-auto space-y-8">
       <Card>
         <CardHeader>
           <CardTitle>Deposit Funds</CardTitle>
           <CardDescription>Add money to your wallet</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-8">
           {/* Amount Input */}
           <div>
             <Input
@@ -171,7 +171,7 @@ export function DepositForm() {
                 label="Card Number"
                 placeholder="1234 5678 9012 3456"
               />
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-8">
                 <Input
                   label="Expiry Date"
                   placeholder="MM/YY"
