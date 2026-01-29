@@ -112,16 +112,16 @@ export default function AdminTransactionsPage() {
                 description={`${pendingCount} pending transaction${pendingCount !== 1 ? 's' : ''} require attention`}
             />
 
-            <div className="p-8 space-y-6">
+            <div className="p-4 lg:p-8 space-y-4 lg:space-y-6">
                 {/* Filter Tabs */}
-                <div className="flex gap-2">
+                <div className="flex gap-2 overflow-x-auto pb-2">
                     {(['all', 'pending', 'completed', 'failed'] as const).map((f) => (
                         <button
                             key={f}
                             onClick={() => setFilter(f)}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${filter === f
-                                    ? 'bg-yellow-500 text-black'
-                                    : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white'
+                                ? 'bg-yellow-500 text-black'
+                                : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white'
                                 }`}
                         >
                             {f}
@@ -140,8 +140,83 @@ export default function AdminTransactionsPage() {
                     </div>
                 )}
 
-                {/* Transactions Table */}
-                <Card className="bg-zinc-900/50 border-zinc-800 overflow-hidden">
+                {/* Mobile Card View */}
+                <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {filteredTransactions.length === 0 ? (
+                        <div className="col-span-full p-8 text-center text-zinc-500">
+                            No transactions found
+                        </div>
+                    ) : (
+                        filteredTransactions.map((tx) => {
+                            const Icon = typeIcons[tx.type] || RefreshCw
+                            const isProcessing = processingId === tx.id
+
+                            return (
+                                <Card key={tx.id} className="bg-zinc-900/50 border-zinc-800 p-4">
+                                    <div className="flex items-start justify-between mb-3">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`p-2 rounded-lg ${tx.type === 'deposit' || tx.type === 'admin_credit'
+                                                ? 'bg-green-500/10'
+                                                : 'bg-red-500/10'
+                                                }`}>
+                                                <Icon className={`h-4 w-4 ${tx.type === 'deposit' || tx.type === 'admin_credit'
+                                                    ? 'text-green-500'
+                                                    : 'text-red-500'
+                                                    }`} />
+                                            </div>
+                                            <div>
+                                                <p className="font-medium text-white text-sm">
+                                                    {tx.profiles?.full_name || 'Unknown'}
+                                                </p>
+                                                <p className="text-xs text-zinc-500 capitalize">{tx.type.replace('_', ' ')}</p>
+                                            </div>
+                                        </div>
+                                        <Badge variant={statusVariants[tx.status]} className="text-xs">
+                                            {tx.status}
+                                        </Badge>
+                                    </div>
+
+                                    <div className="flex items-end justify-between">
+                                        <div>
+                                            <p className={`text-lg font-bold ${tx.type === 'deposit' || tx.type === 'admin_credit'
+                                                ? 'text-green-500'
+                                                : 'text-red-500'
+                                                }`}>
+                                                {tx.type === 'deposit' || tx.type === 'admin_credit' ? '+' : '-'}
+                                                {formatCurrency(tx.amount)}
+                                            </p>
+                                            <p className="text-xs text-zinc-500">{formatDate(tx.created_at)}</p>
+                                        </div>
+
+                                        {tx.status === 'pending' && (
+                                            <div className="flex gap-2">
+                                                <Button
+                                                    size="sm"
+                                                    onClick={() => handleUpdateStatus(tx.id, 'completed')}
+                                                    disabled={isProcessing}
+                                                    className="bg-green-500/10 text-green-500 hover:bg-green-500/20 border-0 px-3"
+                                                >
+                                                    {isProcessing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    onClick={() => handleUpdateStatus(tx.id, 'failed')}
+                                                    disabled={isProcessing}
+                                                    className="bg-red-500/10 text-red-500 hover:bg-red-500/20 border-0 px-3"
+                                                >
+                                                    <X className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </Card>
+                            )
+                        })
+                    )}
+                </div>
+
+                {/* Desktop Table View */}
+                <Card className="hidden lg:block bg-zinc-900/50 border-zinc-800 overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
@@ -179,16 +254,16 @@ export default function AdminTransactionsPage() {
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-2">
                                                         <Icon className={`h-4 w-4 ${tx.type === 'deposit' || tx.type === 'admin_credit'
-                                                                ? 'text-green-500'
-                                                                : 'text-red-500'
+                                                            ? 'text-green-500'
+                                                            : 'text-red-500'
                                                             }`} />
                                                         <span className="text-zinc-300 capitalize">{tx.type.replace('_', ' ')}</span>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 text-right">
                                                     <span className={`font-medium ${tx.type === 'deposit' || tx.type === 'admin_credit'
-                                                            ? 'text-green-500'
-                                                            : 'text-red-500'
+                                                        ? 'text-green-500'
+                                                        : 'text-red-500'
                                                         }`}>
                                                         {tx.type === 'deposit' || tx.type === 'admin_credit' ? '+' : '-'}
                                                         {formatCurrency(tx.amount)}
