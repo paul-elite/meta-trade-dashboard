@@ -3,11 +3,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
-import { Wallet, Mail, Lock } from 'lucide-react'
+import { Mail, Lock } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -42,83 +40,95 @@ export default function LoginPage() {
   }
 
   return (
-    <Card variant="elevated" className="w-full">
-      <CardHeader className="text-center pb-2">
-        <div className="flex justify-center mb-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-lg shadow-yellow-500/25">
-            <Wallet className="h-7 w-7 text-white" />
-          </div>
+    <div className="w-full max-w-md">
+      <div className="bg-[#1a1a1a] rounded-3xl p-10 shadow-2xl">
+        {/* Logo */}
+        <div className="flex justify-center mb-10">
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={48}
+            height={48}
+            className="h-12 w-auto"
+          />
         </div>
-        <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Welcome Back</h1>
-        <p className="text-zinc-400 mt-1">Sign in to your MetaTrade account</p>
-      </CardHeader>
 
-      <CardContent>
-        <form onSubmit={handleLogin} className="space-y-4">
+        {/* Header */}
+        <div className="mb-10">
+          <h1 className="text-2xl font-semibold text-white tracking-tight">
+            Welcome back
+          </h1>
+          <p className="text-[#888] mt-2">
+            Sign in to your account
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleLogin} className="space-y-6">
           {error && (
-            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 text-sm">
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
               {error}
             </div>
           )}
 
-          <Input
-            label="Email"
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            leftIcon={<Mail className="h-4 w-4" />}
-            required
-          />
-
-          <Input
-            label="Password"
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            leftIcon={<Lock className="h-4 w-4" />}
-            required
-          />
-
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 text-sm text-zinc-400">
-              <input
-                type="checkbox"
-                className="rounded border-zinc-700 bg-zinc-900 text-yellow-500 focus:ring-yellow-500"
-              />
-              Remember me
+          {/* Email */}
+          <div>
+            <label className="block text-sm text-[#888] mb-2">
+              Email
             </label>
-            <Link
-              href="#"
-              className="text-sm text-yellow-500 hover:text-yellow-400 transition-colors"
-            >
-              Forgot password?
-            </Link>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#666]">
+                <Mail className="h-5 w-5" />
+              </div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-xl pl-12 pr-4 py-4 text-white placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
+              />
+            </div>
           </div>
 
-          <Button
-            type="submit"
-            className="w-full"
-            size="lg"
-            isLoading={isLoading}
-          >
-            Sign In
-          </Button>
-        </form>
-      </CardContent>
+          {/* Password */}
+          <div>
+            <label className="block text-sm text-[#888] mb-2">
+              Password
+            </label>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#666]">
+                <Lock className="h-5 w-5" />
+              </div>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                required
+                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-xl pl-12 pr-4 py-4 text-white placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
+              />
+            </div>
+          </div>
 
-      <CardFooter className="justify-center">
-        <p className="text-sm text-zinc-400">
-          Don&apos;t have an account?{' '}
-          <Link
-            href="/signup"
-            className="text-yellow-500 hover:text-yellow-400 font-medium transition-colors"
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full bg-[#f5f5f5] hover:bg-white text-[#1a1a1a] font-medium py-4 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
           >
+            {isLoading ? 'Signing in...' : 'Sign In'}
+          </button>
+        </form>
+
+        {/* Footer */}
+        <p className="text-center text-[#666] mt-8">
+          Don&apos;t have an account?{' '}
+          <Link href="/signup" className="text-white hover:underline">
             Sign up
           </Link>
         </p>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   )
 }

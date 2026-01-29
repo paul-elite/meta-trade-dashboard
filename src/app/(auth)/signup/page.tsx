@@ -3,11 +3,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
-import { Wallet, Mail, Lock, User } from 'lucide-react'
+import { Mail, Lock, User } from 'lucide-react'
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState('')
@@ -37,7 +35,6 @@ export default function SignupPage() {
 
     try {
       const supabase = createClient()
-      // Sign up the user
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
@@ -51,14 +48,12 @@ export default function SignupPage() {
       if (authError) throw authError
 
       if (authData.user) {
-        // Create profile
         await supabase.from('profiles').insert({
           id: authData.user.id,
           email,
           full_name: fullName,
         })
 
-        // Create wallet
         await supabase.from('wallets').insert({
           user_id: authData.user.id,
           balance: 0,
@@ -77,105 +72,154 @@ export default function SignupPage() {
   }
 
   return (
-    <Card variant="elevated" className="w-full">
-      <CardHeader className="text-center pb-2">
-        <div className="flex justify-center mb-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-lg shadow-yellow-500/25">
-            <Wallet className="h-7 w-7 text-white" />
-          </div>
+    <div className="w-full max-w-md">
+      <div className="bg-[#1a1a1a] rounded-3xl p-10 shadow-2xl">
+        {/* Logo */}
+        <div className="flex justify-center mb-10">
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={48}
+            height={48}
+            className="h-12 w-auto"
+          />
         </div>
-        <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Create Account</h1>
-        <p className="text-zinc-400 mt-1">Start your journey with MetaTrade</p>
-      </CardHeader>
 
-      <CardContent>
-        <form onSubmit={handleSignup} className="space-y-4">
+        {/* Header */}
+        <div className="mb-10">
+          <h1 className="text-2xl font-semibold text-white tracking-tight">
+            Create account
+          </h1>
+          <p className="text-[#888] mt-2">
+            Start your journey with MetaTrade
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSignup} className="space-y-6">
           {error && (
-            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 text-sm">
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
               {error}
             </div>
           )}
 
-          <Input
-            label="Full Name"
-            type="text"
-            placeholder="Enter your full name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            leftIcon={<User className="h-4 w-4" />}
-            required
-          />
+          {/* Full Name */}
+          <div>
+            <label className="block text-sm text-[#888] mb-2">
+              Full Name
+            </label>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#666]">
+                <User className="h-5 w-5" />
+              </div>
+              <input
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="Enter your full name"
+                required
+                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-xl pl-12 pr-4 py-4 text-white placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
+              />
+            </div>
+          </div>
 
-          <Input
-            label="Email"
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            leftIcon={<Mail className="h-4 w-4" />}
-            required
-          />
+          {/* Email */}
+          <div>
+            <label className="block text-sm text-[#888] mb-2">
+              Email
+            </label>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#666]">
+                <Mail className="h-5 w-5" />
+              </div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-xl pl-12 pr-4 py-4 text-white placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
+              />
+            </div>
+          </div>
 
-          <Input
-            label="Password"
-            type="password"
-            placeholder="Create a password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            leftIcon={<Lock className="h-4 w-4" />}
-            required
-          />
+          {/* Password */}
+          <div>
+            <label className="block text-sm text-[#888] mb-2">
+              Password
+            </label>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#666]">
+                <Lock className="h-5 w-5" />
+              </div>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Create a password"
+                required
+                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-xl pl-12 pr-4 py-4 text-white placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
+              />
+            </div>
+          </div>
 
-          <Input
-            label="Confirm Password"
-            type="password"
-            placeholder="Confirm your password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            leftIcon={<Lock className="h-4 w-4" />}
-            required
-          />
+          {/* Confirm Password */}
+          <div>
+            <label className="block text-sm text-[#888] mb-2">
+              Confirm Password
+            </label>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#666]">
+                <Lock className="h-5 w-5" />
+              </div>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm your password"
+                required
+                className="w-full bg-[#252525] border border-[#2a2a2a] rounded-xl pl-12 pr-4 py-4 text-white placeholder:text-[#555] focus:outline-none focus:border-[#444] transition-colors"
+              />
+            </div>
+          </div>
 
-          <div className="flex items-start gap-2">
+          {/* Terms */}
+          <div className="flex items-start gap-3">
             <input
               type="checkbox"
               required
-              className="mt-1 rounded border-zinc-700 bg-zinc-900 text-yellow-500 focus:ring-yellow-500"
+              className="mt-1 rounded border-[#2a2a2a] bg-[#252525] text-white focus:ring-0 focus:ring-offset-0"
             />
-            <label className="text-sm text-zinc-400">
+            <label className="text-sm text-[#888]">
               I agree to the{' '}
-              <Link href="#" className="text-yellow-500 hover:text-yellow-400">
+              <Link href="#" className="text-white hover:underline">
                 Terms of Service
               </Link>{' '}
               and{' '}
-              <Link href="#" className="text-yellow-500 hover:text-yellow-400">
+              <Link href="#" className="text-white hover:underline">
                 Privacy Policy
               </Link>
             </label>
           </div>
 
-          <Button
+          {/* Submit */}
+          <button
             type="submit"
-            className="w-full"
-            size="lg"
-            isLoading={isLoading}
+            disabled={isLoading}
+            className="w-full bg-[#f5f5f5] hover:bg-white text-[#1a1a1a] font-medium py-4 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
           >
-            Create Account
-          </Button>
+            {isLoading ? 'Creating account...' : 'Create Account'}
+          </button>
         </form>
-      </CardContent>
 
-      <CardFooter className="justify-center">
-        <p className="text-sm text-zinc-400">
+        {/* Footer */}
+        <p className="text-center text-[#666] mt-8">
           Already have an account?{' '}
-          <Link
-            href="/login"
-            className="text-yellow-500 hover:text-yellow-400 font-medium transition-colors"
-          >
+          <Link href="/login" className="text-white hover:underline">
             Sign in
           </Link>
         </p>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   )
 }
