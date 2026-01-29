@@ -71,3 +71,85 @@ export async function GET(
 
   return NextResponse.json({ user: profileWithWallet, transactions })
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ userId: string }> }
+) {
+  try {
+    const supabase = await createClient()
+    const { userId } = await params
+
+    // Verify user is authenticated
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Prevent self-deletion
+    if (user.id === userId) {
+      return NextResponse.json({ error: 'Cannot delete your own account' }, { status: 400 })
+    }
+
+    // Use admin client for admin operations
+    const adminClient = createAdminClient()
+
+    // Check if admin
+    const { data: adminProfile } = await adminClient
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', user.id)
+      .single()
+
+    if (!adminProfile?.is_admin) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    // Check if target user exists and is not an admin
+    const { data: targetUser } = await adminClient
+      .from('profiles')
+      .select('is_admin, email')
+      .eq('id', userId)
+      .single()
+
+    if (!targetUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    if (targetUser.is_admin) {
+      return NextResponse.json({ error: 'Cannot delete admin users' }, { status: 400 })
+    }
+
+    // Delete user's transactions
+    await adminClient
+      .from('transactions')
+      .delete()
+      .eq('user_id', userId)
+
+    // Delete user's wallet
+    await adminClient
+      .from('wallets')
+      .delete()
+      .eq('user_id', userId)
+
+    // Delete user's profile
+    await adminClient
+      .from('profiles')
+      .delete()
+      .eq('id', userId)
+
+    // Delete from auth.users (requires service role)
+    const { error: authError } = await adminClient.auth.admin.deleteUser(userId)
+
+    if (authError) {
+      console.error('Error deleting auth user:', authError)
+      // Continue anyway - profile is already deleted
+    }
+
+    return NextResponse.json({ success: true, message: 'User deleted successfully' })
+  } catch (err: unknown) {
+    const error = err as Error
+    console.error('Delete user error:', error)
+    return NextResponse.json({ error: error.message || 'Failed to delete user' }, { status: 500 })
+  }
+}
