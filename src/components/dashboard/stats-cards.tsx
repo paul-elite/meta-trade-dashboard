@@ -2,7 +2,7 @@
 
 import { Card } from '@/components/ui/card'
 import { formatCurrency } from '@/lib/utils'
-import { ArrowDownToLine, ArrowUpFromLine, RefreshCw, TrendingUp } from 'lucide-react'
+import { ArrowDownToLine, ArrowUpFromLine, RefreshCw, Activity } from 'lucide-react'
 import { useStore } from '@/store/useStore'
 
 export function StatsCards() {
@@ -24,43 +24,35 @@ export function StatsCards() {
       title: 'Total Deposits',
       value: formatCurrency(stats.totalDeposits),
       icon: ArrowDownToLine,
-      color: 'text-yellow-500',
-      bgColor: 'bg-yellow-500/10',
     },
     {
       title: 'Total Withdrawals',
       value: formatCurrency(stats.totalWithdrawals),
       icon: ArrowUpFromLine,
-      color: 'text-red-500',
-      bgColor: 'bg-red-500/10',
     },
     {
-      title: 'Pending',
+      title: 'Pending Actions',
       value: stats.pendingTransactions.toString(),
       icon: RefreshCw,
-      color: 'text-yellow-500',
-      bgColor: 'bg-yellow-500/10',
     },
     {
-      title: 'Total Transactions',
+      title: 'Total Activity',
       value: stats.totalTransactions.toString(),
-      icon: TrendingUp,
-      color: 'text-blue-500',
-      bgColor: 'bg-blue-500/10',
+      icon: Activity,
     },
   ]
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {statItems.map((stat) => (
-        <Card key={stat.title} className="p-5">
-          <div className="flex items-center justify-between">
+        <Card key={stat.title} className="p-6 bg-zinc-900/30 border-zinc-800 hover:bg-zinc-900/50 transition-colors group">
+          <div className="flex items-start justify-between">
             <div>
-              <p className="text-sm text-zinc-400 mb-1">{stat.title}</p>
-              <p className="text-2xl font-bold text-zinc-100">{stat.value}</p>
+              <p className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-2">{stat.title}</p>
+              <p className="text-2xl font-bold text-white group-hover:text-yellow-500 transition-colors">{stat.value}</p>
             </div>
-            <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${stat.bgColor}`}>
-              <stat.icon className={`h-5 w-5 ${stat.color}`} />
+            <div className="p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 group-hover:text-yellow-500 group-hover:border-yellow-500/20 transition-colors">
+              <stat.icon className="h-4 w-4" />
             </div>
           </div>
         </Card>
@@ -68,3 +60,4 @@ export function StatsCards() {
     </div>
   )
 }
+

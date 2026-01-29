@@ -15,12 +15,14 @@ import {
   Menu,
   X,
   Shield,
+  Activity,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Market', href: '/market', icon: Activity },
   { name: 'Deposit', href: '/deposit', icon: ArrowDownToLine },
   { name: 'Withdraw', href: '/withdraw', icon: ArrowUpFromLine },
   { name: 'Transactions', href: '/transactions', icon: History },

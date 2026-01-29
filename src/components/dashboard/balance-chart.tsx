@@ -20,9 +20,9 @@ const data = [
 
 export function BalanceChart() {
   return (
-    <Card>
+    <Card className="bg-zinc-900/30 border-zinc-800">
       <CardHeader>
-        <CardTitle>Balance History</CardTitle>
+        <CardTitle className="text-zinc-200">Balance History</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-[300px] w-full">
@@ -33,38 +33,41 @@ export function BalanceChart() {
             >
               <defs>
                 <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#eab308" stopOpacity={0.2} />
+                  <stop offset="95%" stopColor="#eab308" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
               <XAxis
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: '#94a3b8', fontSize: 12 }}
+                tick={{ fill: '#71717a', fontSize: 12 }}
+                dy={10}
               />
               <YAxis
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: '#94a3b8', fontSize: 12 }}
+                tick={{ fill: '#71717a', fontSize: 12 }}
                 tickFormatter={(value) => `$${value / 1000}k`}
+                dx={-10}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#1e293b',
-                  border: '1px solid #334155',
-                  borderRadius: '8px',
+                  backgroundColor: '#09090b',
+                  border: '1px solid #27272a',
+                  borderRadius: '12px',
                   boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                 }}
-                labelStyle={{ color: '#f1f5f9' }}
-                itemStyle={{ color: '#10b981' }}
+                labelStyle={{ color: '#a1a1aa', marginBottom: '0.5rem' }}
+                itemStyle={{ color: '#eab308', fontWeight: 600 }}
                 formatter={(value) => [`$${Number(value).toLocaleString()}`, 'Balance']}
+                cursor={{ stroke: '#27272a', strokeWidth: 1 }}
               />
               <Area
                 type="monotone"
                 dataKey="balance"
-                stroke="#10b981"
+                stroke="#eab308"
                 strokeWidth={2}
                 fillOpacity={1}
                 fill="url(#colorBalance)"
@@ -76,3 +79,4 @@ export function BalanceChart() {
     </Card>
   )
 }
+
