@@ -20,7 +20,7 @@ const features = [
   {
     icon: Zap,
     title: 'Lightning Fast',
-    description: 'Execute trades in milliseconds with our high-performance trading engine.',
+    description: 'Experience blazing fast mining operations with our high-performance infrastructure.',
     color: 'text-yellow-500',
     bgColor: 'bg-yellow-500/10'
   },
@@ -34,7 +34,7 @@ const features = [
   {
     icon: Wallet,
     title: 'Multi-Currency Support',
-    description: 'Trade Bitcoin, Ethereum, and 100+ cryptocurrencies from a single dashboard.',
+    description: 'Mine Bitcoin, Ethereum, and more cryptocurrencies from a single dashboard.',
     color: 'text-purple-500',
     bgColor: 'bg-purple-500/10'
   },
@@ -48,7 +48,7 @@ const features = [
   {
     icon: Globe,
     title: 'Global Access',
-    description: 'Trade from anywhere in the world with our mobile-optimized platform.',
+    description: 'Access your mining dashboard from anywhere with our mobile-optimized platform.',
     color: 'text-cyan-500',
     bgColor: 'bg-cyan-500/10'
   }
@@ -61,10 +61,10 @@ export function FeaturesGrid() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Everything You Need to Trade
+            Everything You Need to Mine
           </h2>
           <p className="text-zinc-400 max-w-2xl mx-auto">
-            Powerful features designed for traders of all experience levels.
+            Powerful features designed for miners of all experience levels.
             From beginners to professionals, we have you covered.
           </p>
         </div>

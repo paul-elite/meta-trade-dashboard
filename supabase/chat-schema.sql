@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS public.conversations (
     -- Guest metadata (name, email if provided)
     guest_name TEXT,
     guest_email TEXT,
+    
     -- Timestamps
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()

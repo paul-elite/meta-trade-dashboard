@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Modal } from '@/components/ui/modal'
+import { useAdminStore } from '@/store/useAdminStore'
 import { Plus, Minus } from 'lucide-react'
 
 interface WalletActionsProps {
@@ -14,6 +15,7 @@ interface WalletActionsProps {
 }
 
 export function WalletActions({ userId, currentBalance, onSuccess }: WalletActionsProps) {
+  const { updateUserWallet } = useAdminStore()
   const [amount, setAmount] = useState('')
   const [description, setDescription] = useState('')
   const [actionType, setActionType] = useState<'credit' | 'debit'>('credit')
@@ -69,6 +71,11 @@ export function WalletActions({ userId, currentBalance, onSuccess }: WalletActio
       setSuccess(data.message)
       setAmount('')
       setDescription('')
+
+      // Update admin store for users list sync
+      updateUserWallet(userId, data.newBalance)
+
+      // Callback for local state update
       onSuccess(data.newBalance)
 
       setTimeout(() => setSuccess(''), 3000)
@@ -91,22 +98,20 @@ export function WalletActions({ userId, currentBalance, onSuccess }: WalletActio
           <div className="flex gap-2">
             <button
               onClick={() => setActionType('credit')}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-medium transition-colors ${
-                actionType === 'credit'
+              className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-medium transition-colors ${actionType === 'credit'
                   ? 'bg-yellow-500 text-white'
                   : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
-              }`}
+                }`}
             >
               <Plus className="h-4 w-4" />
               Credit
             </button>
             <button
               onClick={() => setActionType('debit')}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-medium transition-colors ${
-                actionType === 'debit'
+              className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-medium transition-colors ${actionType === 'debit'
                   ? 'bg-red-500 text-white'
                   : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
-              }`}
+                }`}
             >
               <Minus className="h-4 w-4" />
               Debit

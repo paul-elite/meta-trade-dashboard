@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input'
 import { createClient } from '@/lib/supabase/client'
 import { useStore } from '@/store/useStore'
 import { formatCurrency, generateReference } from '@/lib/utils'
-import { CheckCircle2, AlertCircle, Wallet, ArrowRight } from 'lucide-react'
+import { AlertCircle, Wallet, ArrowRight } from 'lucide-react'
+import { TransactionStatus } from './transaction-status'
 
 // Common crypto networks/coins for withdrawal
 const cryptoNetworks = [
@@ -20,13 +21,25 @@ export function WithdrawForm() {
   const [walletAddress, setWalletAddress] = useState('')
   const [selectedNetwork, setSelectedNetwork] = useState(cryptoNetworks[0].id)
   const [isLoading, setIsLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
+
+  // Transaction status state
+  const [showStatus, setShowStatus] = useState(false)
+  const [statusType, setStatusType] = useState<'success' | 'failed'>('success')
+  const [statusMessage, setStatusMessage] = useState('')
+  const [submittedAmount, setSubmittedAmount] = useState(0)
 
   const { user, wallet, setWallet, addTransaction } = useStore()
   const supabase = createClient()
 
   const maxWithdraw = wallet?.balance || 0
+
+  const resetForm = () => {
+    setAmount('')
+    setWalletAddress('')
+    setError('')
+    setShowStatus(false)
+  }
 
   const handleWithdraw = async () => {
     const withdrawAmount = parseFloat(amount)
@@ -53,6 +66,7 @@ export function WithdrawForm() {
 
     setIsLoading(true)
     setError('')
+    setSubmittedAmount(withdrawAmount)
 
     try {
       // Create transaction
@@ -84,156 +98,148 @@ export function WithdrawForm() {
 
       setWallet(updatedWallet)
       addTransaction(transaction)
-      setSuccess(true)
+
+      // Show success status with confetti
+      setStatusType('success')
+      setStatusMessage(`Your withdrawal of ${formatCurrency(withdrawAmount)} to ${selectedNetwork} address is being processed.`)
+      setShowStatus(true)
       setAmount('')
       setWalletAddress('')
-
-      // Reset success after user interaction or delay
-      // setTimeout(() => setSuccess(false), 5000)
     } catch (err) {
       console.error('Withdraw error:', err)
-      setError(err instanceof Error ? err.message : 'Failed to process withdrawal')
+      // Show failure status
+      setStatusType('failed')
+      setStatusMessage(err instanceof Error ? err.message : 'Failed to process withdrawal. Please try again.')
+      setShowStatus(true)
     } finally {
       setIsLoading(false)
     }
   }
 
-  if (success) {
-    return (
-      <Card className="max-w-lg mx-auto bg-zinc-900/50 border-zinc-800">
-        <CardContent className="pt-6">
-          <div className="text-center py-12">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-yellow-500/10 mx-auto mb-6">
-              <CheckCircle2 className="h-10 w-10 text-yellow-500" />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-2">Withdrawal Submitted!</h3>
-            <p className="text-zinc-400 mb-8 max-w-xs mx-auto">
-              Your withdrawal request has been received and is being processed.
-            </p>
-            <Button
-              onClick={() => setSuccess(false)}
-              className="bg-zinc-800 text-white hover:bg-zinc-700 w-full sm:w-auto px-8"
-              size="lg"
-            >
-              Back to Wallet
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
   return (
-    <div className="max-w-lg mx-auto space-y-8">
-      {/* Balance Card */}
-      <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-zinc-800 overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/5 rounded-bl-full -mr-8 -mt-8" />
-        <CardContent className="pt-8 pb-8 relative z-10">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <p className="text-sm font-medium text-zinc-400 mb-1">Available Balance</p>
-              <p className="text-3xl font-bold text-white tracking-tight">
-                {formatCurrency(maxWithdraw)}
+    <>
+      <div className="max-w-lg mx-auto space-y-8">
+        {/* Balance Card */}
+        <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-zinc-800 overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/5 rounded-bl-full -mr-8 -mt-8" />
+          <CardContent className="pt-8 pb-8 relative z-10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium text-zinc-400 mb-1">Available Balance</p>
+                <p className="text-3xl font-bold text-white tracking-tight">
+                  {formatCurrency(maxWithdraw)}
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setAmount(maxWithdraw.toString())
+                  setError('')
+                }}
+                className="border-zinc-700 hover:bg-zinc-800 text-zinc-300 self-start sm:self-center"
+              >
+                Withdraw Max
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-zinc-900/50 border-zinc-800">
+          <CardHeader>
+            <CardTitle className="text-white">Withdraw Funds</CardTitle>
+            <CardDescription className="text-zinc-400">Transfer crypto to your external wallet</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-8">
+
+            {/* Amount Input */}
+            <div className="space-y-3">
+              <Input
+                label="Amount to Withdraw"
+                type="number"
+                placeholder="0.00"
+                value={amount}
+                onChange={(e) => {
+                  setAmount(e.target.value)
+                  setError('')
+                }}
+                leftIcon={<span className="text-zinc-400 font-medium">$</span>}
+                error={error && error.includes('amount') || error.includes('balance') ? error : ''}
+                className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-yellow-500/50 focus:ring-yellow-500/20 text-lg py-6"
+              />
+            </div>
+
+            {/* Network Selection */}
+            <div className="space-y-3">
+              <label className="block text-sm font-medium text-zinc-300">
+                Select Network
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {cryptoNetworks.map((network) => (
+                  <button
+                    key={network.id}
+                    onClick={() => setSelectedNetwork(network.id)}
+                    className={`flex items-center gap-3 p-3 rounded-xl border transition-all text-sm font-medium ${selectedNetwork === network.id
+                      ? 'border-yellow-500 bg-yellow-500/10 text-yellow-500'
+                      : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
+                      }`}
+                  >
+                    <div className={`w-2 h-2 rounded-full ${selectedNetwork === network.id ? 'bg-yellow-500' : 'bg-zinc-600'}`} />
+                    {network.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Wallet Address Input */}
+            <div className="space-y-3">
+              <Input
+                label="Wallet Address"
+                placeholder={`Enter your ${selectedNetwork} address`}
+                value={walletAddress}
+                onChange={(e) => {
+                  setWalletAddress(e.target.value)
+                  setError('')
+                }}
+                leftIcon={<Wallet className="h-4 w-4 text-zinc-400" />}
+                error={error && error.includes('address') ? error : ''}
+                className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 font-mono text-sm py-6 focus:border-yellow-500/50 focus:ring-yellow-500/20"
+              />
+              <p className="text-xs text-zinc-500">
+                Please double-check your address. Transfers cannot be reversed.
               </p>
             </div>
+
+            {error && !error.includes('amount') && !error.includes('balance') && !error.includes('address') && (
+              <div className="flex items-center gap-2 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+                <AlertCircle className="h-4 w-4 shrink-0" />
+                {error}
+              </div>
+            )}
+
             <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                setAmount(maxWithdraw.toString())
-                setError('')
-              }}
-              className="border-zinc-700 hover:bg-zinc-800 text-zinc-300 self-start sm:self-center"
+              className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-semibold text-lg py-6 rounded-xl shadow-lg shadow-yellow-500/10 hover:shadow-yellow-500/20 transition-all"
+              onClick={handleWithdraw}
+              isLoading={isLoading}
+              disabled={!amount || parseFloat(amount) <= 0 || parseFloat(amount) > maxWithdraw || !walletAddress}
+              rightIcon={<ArrowRight className="h-5 w-5 opacity-70" />}
             >
-              Withdraw Max
+              Withdraw Funds
             </Button>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
 
-      <Card className="bg-zinc-900/50 border-zinc-800">
-        <CardHeader>
-          <CardTitle className="text-white">Withdraw Funds</CardTitle>
-          <CardDescription className="text-zinc-400">Transfer crypto to your external wallet</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-8">
-
-          {/* Amount Input */}
-          <div className="space-y-3">
-            <Input
-              label="Amount to Withdraw"
-              type="number"
-              placeholder="0.00"
-              value={amount}
-              onChange={(e) => {
-                setAmount(e.target.value)
-                setError('')
-              }}
-              leftIcon={<span className="text-zinc-400 font-medium">$</span>}
-              error={error && error.includes('amount') || error.includes('balance') ? error : ''}
-              className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-yellow-500/50 focus:ring-yellow-500/20 text-lg py-6"
-            />
-          </div>
-
-          {/* Network Selection */}
-          <div className="space-y-3">
-            <label className="block text-sm font-medium text-zinc-300">
-              Select Network
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {cryptoNetworks.map((network) => (
-                <button
-                  key={network.id}
-                  onClick={() => setSelectedNetwork(network.id)}
-                  className={`flex items-center gap-3 p-3 rounded-xl border transition-all text-sm font-medium ${selectedNetwork === network.id
-                    ? 'border-yellow-500 bg-yellow-500/10 text-yellow-500'
-                    : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
-                    }`}
-                >
-                  <div className={`w-2 h-2 rounded-full ${selectedNetwork === network.id ? 'bg-yellow-500' : 'bg-zinc-600'}`} />
-                  {network.name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Wallet Address Input */}
-          <div className="space-y-3">
-            <Input
-              label="Wallet Address"
-              placeholder={`Enter your ${selectedNetwork} address`}
-              value={walletAddress}
-              onChange={(e) => {
-                setWalletAddress(e.target.value)
-                setError('')
-              }}
-              leftIcon={<Wallet className="h-4 w-4 text-zinc-400" />}
-              error={error && error.includes('address') ? error : ''}
-              className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 font-mono text-sm py-6 focus:border-yellow-500/50 focus:ring-yellow-500/20"
-            />
-            <p className="text-xs text-zinc-500">
-              Please double-check your address. Transfers cannot be reversed.
-            </p>
-          </div>
-
-          {error && !error.includes('amount') && !error.includes('balance') && !error.includes('address') && (
-            <div className="flex items-center gap-2 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              {error}
-            </div>
-          )}
-
-          <Button
-            className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-semibold text-lg py-6 rounded-xl shadow-lg shadow-yellow-500/10 hover:shadow-yellow-500/20 transition-all"
-            onClick={handleWithdraw}
-            isLoading={isLoading}
-            disabled={!amount || parseFloat(amount) <= 0 || parseFloat(amount) > maxWithdraw || !walletAddress}
-            rightIcon={<ArrowRight className="h-5 w-5 opacity-70" />}
-          >
-            Withdraw Funds
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
+      {/* Transaction Status Overlay */}
+      <TransactionStatus
+        isOpen={showStatus}
+        status={statusType}
+        type="withdraw"
+        amount={submittedAmount}
+        message={statusMessage}
+        onClose={resetForm}
+        onRetry={statusType === 'failed' ? () => setShowStatus(false) : undefined}
+      />
+    </>
   )
 }

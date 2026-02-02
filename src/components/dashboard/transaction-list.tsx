@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { formatCurrency, formatDate, getTransactionTypeColor } from '@/lib/utils'
-import { ArrowDownToLine, ArrowUpFromLine, RefreshCw, Plus, Minus } from 'lucide-react'
+import { ArrowDownToLine, ArrowUpFromLine, RefreshCw, Plus, Minus, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
 import { Transaction } from '@/types/database'
 
@@ -24,8 +24,49 @@ const typeIcons = {
   deposit: ArrowDownToLine,
   withdraw: ArrowUpFromLine,
   transfer: RefreshCw,
-  admin_credit: Plus,
+  admin_credit: TrendingUp,
   admin_debit: Minus,
+}
+
+// Helper to get friendly transaction label
+function getTransactionLabel(transaction: Transaction): string {
+  const { type, description } = transaction
+
+  if (type === 'admin_credit') {
+    return 'Mining Profit'
+  }
+
+  if (type === 'admin_debit') {
+    return 'Account Adjustment'
+  }
+
+  if (type === 'deposit') {
+    // Try to extract crypto type from description
+    if (description?.toLowerCase().includes('btc') || description?.toLowerCase().includes('bitcoin')) {
+      return 'Deposit via BTC'
+    }
+    if (description?.toLowerCase().includes('eth') || description?.toLowerCase().includes('ethereum')) {
+      return 'Deposit via ETH'
+    }
+    return 'Deposit'
+  }
+
+  if (type === 'withdraw') {
+    // Try to extract crypto type from description
+    if (description?.toLowerCase().includes('btc') || description?.toLowerCase().includes('bitcoin')) {
+      return 'Withdrawal via BTC'
+    }
+    if (description?.toLowerCase().includes('eth') || description?.toLowerCase().includes('ethereum')) {
+      return 'Withdrawal via ETH'
+    }
+    return 'Withdrawal'
+  }
+
+  if (type === 'transfer') {
+    return 'Transfer'
+  }
+
+  return type
 }
 
 export function TransactionList({ transactions, limit, showViewAll = true }: TransactionListProps) {
@@ -59,21 +100,24 @@ export function TransactionList({ transactions, limit, showViewAll = true }: Tra
           <div className="space-y-3">
             {displayTransactions.map((transaction) => {
               const Icon = typeIcons[transaction.type]
+              const isCredit = transaction.type === 'deposit' || transaction.type === 'admin_credit'
               return (
                 <div
                   key={transaction.id}
                   className="flex items-center justify-between p-3 rounded-lg bg-zinc-900/50 hover:bg-zinc-900 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                      transaction.type === 'deposit' ? 'bg-yellow-500/10' :
-                      transaction.type === 'withdraw' ? 'bg-red-500/10' : 'bg-blue-500/10'
-                    }`}>
-                      <Icon className={`h-5 w-5 ${getTransactionTypeColor(transaction.type)}`} />
+                    <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${transaction.type === 'admin_credit' ? 'bg-green-500/10' :
+                        transaction.type === 'deposit' ? 'bg-yellow-500/10' :
+                          transaction.type === 'withdraw' ? 'bg-red-500/10' : 'bg-blue-500/10'
+                      }`}>
+                      <Icon className={`h-5 w-5 ${transaction.type === 'admin_credit' ? 'text-green-500' :
+                          getTransactionTypeColor(transaction.type)
+                        }`} />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-zinc-100 capitalize">
-                        {transaction.type}
+                      <p className="text-sm font-medium text-zinc-100">
+                        {getTransactionLabel(transaction)}
                       </p>
                       <p className="text-xs text-zinc-400">
                         {formatDate(transaction.created_at)}
@@ -81,8 +125,10 @@ export function TransactionList({ transactions, limit, showViewAll = true }: Tra
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className={`text-sm font-semibold ${getTransactionTypeColor(transaction.type)}`}>
-                      {transaction.type === 'withdraw' ? '-' : '+'}
+                    <p className={`text-sm font-semibold ${transaction.type === 'admin_credit' ? 'text-green-500' :
+                        getTransactionTypeColor(transaction.type)
+                      }`}>
+                      {isCredit ? '+' : '-'}
                       {formatCurrency(transaction.amount)}
                     </p>
                     <Badge variant={statusVariants[transaction.status]} className="mt-1">

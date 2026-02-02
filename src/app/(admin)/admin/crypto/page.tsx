@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Save, Loader2, Wallet } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { AdminHeader } from '@/components/admin/admin-header'
 import type { CryptoOption } from '@/types/database'
 
 const STATIC_OPTIONS = [
@@ -143,13 +144,15 @@ export default function AdminCryptoPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-white">Payment Methods</h1>
-        <p className="text-zinc-400 mt-1">Set the wallet addresses for user deposits.</p>
-      </div>
+    <div className="min-h-screen">
+      <AdminHeader
+        title="Payment Methods"
+        description="Set the wallet addresses for user deposits"
+        showBack
+        backHref="/admin"
+      />
 
-      <div className="space-y-4">
+      <div className="max-w-2xl mx-auto p-4 md:p-8 space-y-6">
         {STATIC_OPTIONS.map((opt) => (
           <Card key={opt.symbol} className="bg-zinc-900/50 border-zinc-800">
             <CardHeader className="flex flex-row items-center gap-4 pb-2">
@@ -176,28 +179,28 @@ export default function AdminCryptoPage() {
             </CardContent>
           </Card>
         ))}
+
+        {error && (
+          <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm">
+            {success}
+          </div>
+        )}
+
+        <button
+          onClick={handleSave}
+          disabled={isSaving}
+          className="w-full flex items-center justify-center gap-2 bg-yellow-500 text-black px-6 py-4 rounded-xl font-semibold hover:bg-yellow-400 transition-colors disabled:opacity-50"
+        >
+          {isSaving ? <Loader2 className="h-5 w-5 animate-spin" /> : <Save className="h-5 w-5" />}
+          Save Changes
+        </button>
       </div>
-
-      {error && (
-        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-          {error}
-        </div>
-      )}
-
-      {success && (
-        <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm">
-          {success}
-        </div>
-      )}
-
-      <button
-        onClick={handleSave}
-        disabled={isSaving}
-        className="w-full flex items-center justify-center gap-2 bg-yellow-500 text-black px-6 py-4 rounded-xl font-semibold hover:bg-yellow-400 transition-colors disabled:opacity-50"
-      >
-        {isSaving ? <Loader2 className="h-5 w-5 animate-spin" /> : <Save className="h-5 w-5" />}
-        Save Changes
-      </button>
     </div>
   )
 }

@@ -128,19 +128,13 @@ export default function UserDetailPage() {
       <AdminHeader
         title="User Details"
         description={user.email}
+        showBack
+        backHref="/admin/users"
       />
 
       <div className="p-4 md:p-8 space-y-6">
         {/* Top Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <Button
-            variant="ghost"
-            onClick={() => router.push('/admin/users')}
-            leftIcon={<ArrowLeft className="h-4 w-4" />}
-          >
-            Back to Users
-          </Button>
-
+        <div className="flex justify-end">
           {!user.is_admin && (
             <Button
               variant="danger"
@@ -327,11 +321,10 @@ export default function UserDetailPage() {
                         <Badge className={getTransactionTypeColor(tx.type)}>
                           {tx.type.replace('_', ' ')}
                         </Badge>
-                        <span className={`text-sm font-medium ${
-                          tx.type.includes('credit') || tx.type === 'deposit'
+                        <span className={`text-sm font-medium ${tx.type.includes('credit') || tx.type === 'deposit'
                             ? 'text-green-500'
                             : 'text-red-500'
-                        }`}>
+                          }`}>
                           {tx.type.includes('credit') || tx.type === 'deposit' ? '+' : '-'}
                           {formatCurrency(tx.amount, 'USD')}
                         </span>
@@ -378,11 +371,10 @@ export default function UserDetailPage() {
                           <td className="px-4 py-3 text-sm text-zinc-400">
                             {formatDate(tx.created_at)}
                           </td>
-                          <td className={`px-4 py-3 text-sm text-right font-medium ${
-                            tx.type.includes('credit') || tx.type === 'deposit'
+                          <td className={`px-4 py-3 text-sm text-right font-medium ${tx.type.includes('credit') || tx.type === 'deposit'
                               ? 'text-green-500'
                               : 'text-red-500'
-                          }`}>
+                            }`}>
                             {tx.type.includes('credit') || tx.type === 'deposit' ? '+' : '-'}
                             {formatCurrency(tx.amount, 'USD')}
                           </td>

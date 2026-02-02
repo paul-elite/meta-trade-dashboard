@@ -53,14 +53,30 @@ export async function PUT(
         // If approving a deposit, credit the user's wallet
         if (status === 'completed' && transaction.type === 'deposit' && transaction.status === 'pending') {
             // Get user's wallet
-            const { data: wallet, error: walletError } = await adminClient
+            let { data: wallet, error: walletError } = await adminClient
                 .from('wallets')
                 .select('*')
                 .eq('user_id', transaction.user_id)
                 .single()
 
+            // If wallet doesn't exist, create one
             if (walletError || !wallet) {
-                return NextResponse.json({ error: 'User wallet not found' }, { status: 404 })
+                console.log(`Creating wallet for user ${transaction.user_id}`)
+                const { data: newWallet, error: createError } = await adminClient
+                    .from('wallets')
+                    .insert({
+                        user_id: transaction.user_id,
+                        balance: 0,
+                        currency: 'USD'
+                    })
+                    .select()
+                    .single()
+
+                if (createError || !newWallet) {
+                    console.error('Error creating wallet:', createError)
+                    return NextResponse.json({ error: 'Failed to create wallet for user' }, { status: 500 })
+                }
+                wallet = newWallet
             }
 
             // Update wallet balance

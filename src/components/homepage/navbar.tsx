@@ -10,7 +10,7 @@ import Image from 'next/image'
 const navLinks = [
   { href: '#features', label: 'Features' },
   { href: '#platform', label: 'Platform' },
-  { href: '#about', label: 'About' },
+  { href: '/about', label: 'About' },
 ]
 
 export function Navbar() {
@@ -22,7 +22,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.png" alt="MetaTrade Logo" width={180} height={64} />
+            <Image src="/logo.png" alt="Bitcap Mining Logo" width={180} height={64} />
           </Link>
 
           {/* Desktop Navigation */}

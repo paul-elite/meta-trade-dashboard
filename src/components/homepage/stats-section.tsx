@@ -1,9 +1,9 @@
 'use client'
 
 const stats = [
-  { value: '5+', label: 'Years Experience' },
-  { value: '$2B+', label: 'Trading Volume' },
-  { value: '10K+', label: 'Active Traders' },
+  { value: '7+', label: 'Years Experience' },
+  { value: '$2B+', label: 'Mining Volume' },
+  { value: '10K+', label: 'Active Miners' },
   { value: '99.9%', label: 'Uptime' }
 ]
 

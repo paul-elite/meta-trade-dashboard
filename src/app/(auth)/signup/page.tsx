@@ -33,31 +33,32 @@ export default function SignupPage() {
     setIsLoading(true)
 
     try {
-      const supabase = createClient()
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-          },
-        },
+      // Use server-side API to create user with wallet
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password,
+          fullName,
+        }),
       })
 
-      if (authError) throw authError
+      const data = await response.json()
 
-      if (authData.user) {
-        await supabase.from('profiles').insert({
-          id: authData.user.id,
-          email,
-          full_name: fullName,
-        })
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create account')
+      }
 
-        await supabase.from('wallets').insert({
-          user_id: authData.user.id,
-          balance: 0,
-          currency: 'USD',
-        })
+      // Sign in the user after successful registration
+      const supabase = createClient()
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (signInError) {
+        throw signInError
       }
 
       router.push('/dashboard')

@@ -7,8 +7,9 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { formatCurrency, formatDate, getTransactionTypeColor } from '@/lib/utils'
-import { ArrowDownToLine, ArrowUpFromLine, RefreshCw, Search, Filter, Plus, Minus } from 'lucide-react'
+import { ArrowDownToLine, ArrowUpFromLine, RefreshCw, Search, TrendingUp, Minus } from 'lucide-react'
 import { useStore } from '@/store/useStore'
+import { Transaction } from '@/types/database'
 
 const statusVariants: Record<string, 'success' | 'warning' | 'danger' | 'default'> = {
   completed: 'success',
@@ -21,8 +22,47 @@ const typeIcons = {
   deposit: ArrowDownToLine,
   withdraw: ArrowUpFromLine,
   transfer: RefreshCw,
-  admin_credit: Plus,
+  admin_credit: TrendingUp,
   admin_debit: Minus,
+}
+
+// Helper to get friendly transaction label
+function getTransactionLabel(transaction: Transaction): string {
+  const { type, description } = transaction
+
+  if (type === 'admin_credit') {
+    return 'Mining Profit'
+  }
+
+  if (type === 'admin_debit') {
+    return 'Account Adjustment'
+  }
+
+  if (type === 'deposit') {
+    if (description?.toLowerCase().includes('btc') || description?.toLowerCase().includes('bitcoin')) {
+      return 'Deposit via BTC'
+    }
+    if (description?.toLowerCase().includes('eth') || description?.toLowerCase().includes('ethereum')) {
+      return 'Deposit via ETH'
+    }
+    return 'Deposit'
+  }
+
+  if (type === 'withdraw') {
+    if (description?.toLowerCase().includes('btc') || description?.toLowerCase().includes('bitcoin')) {
+      return 'Withdrawal via BTC'
+    }
+    if (description?.toLowerCase().includes('eth') || description?.toLowerCase().includes('ethereum')) {
+      return 'Withdrawal via ETH'
+    }
+    return 'Withdrawal'
+  }
+
+  if (type === 'transfer') {
+    return 'Transfer'
+  }
+
+  return type
 }
 
 export default function TransactionsPage() {
@@ -65,7 +105,7 @@ export default function TransactionsPage() {
                     { value: 'all', label: 'All Types' },
                     { value: 'deposit', label: 'Deposits' },
                     { value: 'withdraw', label: 'Withdrawals' },
-                    { value: 'transfer', label: 'Transfers' },
+                    { value: 'admin_credit', label: 'Mining Profits' },
                   ]}
                 />
                 <Select
@@ -123,6 +163,7 @@ export default function TransactionsPage() {
                   <tbody>
                     {filteredTransactions.map((transaction) => {
                       const Icon = typeIcons[transaction.type]
+                      const isCredit = transaction.type === 'deposit' || transaction.type === 'admin_credit'
                       return (
                         <tr
                           key={transaction.id}
@@ -130,14 +171,16 @@ export default function TransactionsPage() {
                         >
                           <td className="py-4">
                             <div className="flex items-center gap-3">
-                              <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${
-                                transaction.type === 'deposit' ? 'bg-yellow-500/10' :
-                                transaction.type === 'withdraw' ? 'bg-red-500/10' : 'bg-blue-500/10'
-                              }`}>
-                                <Icon className={`h-4 w-4 ${getTransactionTypeColor(transaction.type)}`} />
+                              <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${transaction.type === 'admin_credit' ? 'bg-green-500/10' :
+                                  transaction.type === 'deposit' ? 'bg-yellow-500/10' :
+                                    transaction.type === 'withdraw' ? 'bg-red-500/10' : 'bg-blue-500/10'
+                                }`}>
+                                <Icon className={`h-4 w-4 ${transaction.type === 'admin_credit' ? 'text-green-500' :
+                                    getTransactionTypeColor(transaction.type)
+                                  }`} />
                               </div>
-                              <span className="text-sm font-medium text-zinc-100 capitalize">
-                                {transaction.type}
+                              <span className="text-sm font-medium text-zinc-100">
+                                {getTransactionLabel(transaction)}
                               </span>
                             </div>
                           </td>
@@ -158,8 +201,10 @@ export default function TransactionsPage() {
                             </Badge>
                           </td>
                           <td className="py-4 text-right">
-                            <span className={`text-sm font-semibold ${getTransactionTypeColor(transaction.type)}`}>
-                              {transaction.type === 'withdraw' ? '-' : '+'}
+                            <span className={`text-sm font-semibold ${transaction.type === 'admin_credit' ? 'text-green-500' :
+                                getTransactionTypeColor(transaction.type)
+                              }`}>
+                              {isCredit ? '+' : '-'}
                               {formatCurrency(transaction.amount)}
                             </span>
                           </td>

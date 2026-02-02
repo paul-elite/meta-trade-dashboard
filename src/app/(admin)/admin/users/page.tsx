@@ -5,22 +5,16 @@ import { AdminHeader } from '@/components/admin/admin-header'
 import { UserTable } from '@/components/admin/user-table'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { useAdminStore } from '@/store/useAdminStore'
+import { UserWithWallet } from '@/types/database'
 import { Search } from 'lucide-react'
 
 export default function AdminUsersPage() {
-  const {
-    users,
-    isLoading,
-    usersTotal,
-    searchQuery,
-    setUsers,
-    setIsLoading,
-    setUsersTotal,
-    setSearchQuery
-  } = useAdminStore()
-
-  const [localSearch, setLocalSearch] = useState(searchQuery)
+  // Use LOCAL state only - no store
+  const [users, setUsers] = useState<UserWithWallet[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [usersTotal, setUsersTotal] = useState(0)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [localSearch, setLocalSearch] = useState('')
 
   useEffect(() => {
     fetchUsers()
@@ -38,11 +32,13 @@ export default function AdminUsersPage() {
     try {
       const params = new URLSearchParams()
       if (searchQuery) params.set('search', searchQuery)
+      // Add cache buster to prevent stale data
+      params.set('t', Date.now().toString())
 
-      const response = await fetch(`/api/admin/users?${params}`)
+      const response = await fetch(`/api/admin/users?${params}`, {
+        cache: 'no-store'
+      })
       const data = await response.json()
-
-      console.log('API Response:', data)
 
       if (response.ok) {
         setUsers(data.users || [])

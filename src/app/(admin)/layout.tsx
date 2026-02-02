@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { AdminSidebar } from '@/components/admin/admin-sidebar'
 import { AuthProvider } from '@/components/providers/auth-provider'
-import { Menu } from 'lucide-react'
+import { Menu, ArrowLeft } from 'lucide-react'
 import { Sheet } from '@/components/ui/sheet'
 import { createBrowserClient } from '@supabase/ssr'
 
@@ -83,10 +83,42 @@ export default function AdminLayout({
 
 function MobileHeader() {
   const [isOpen, setIsOpen] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
+
+  // Show back button if not on main admin page
+  const showBack = pathname !== '/admin'
+
+  // Get page title based on path
+  const getTitle = () => {
+    if (pathname.includes('/users/')) return 'User Details'
+    if (pathname === '/admin/users') return 'Users'
+    if (pathname === '/admin/crypto') return 'Payment Methods'
+    if (pathname === '/admin/transactions') return 'Transactions'
+    return 'Admin Dashboard'
+  }
+
+  const handleBack = () => {
+    if (pathname.includes('/users/')) {
+      router.push('/admin/users')
+    } else {
+      router.push('/admin')
+    }
+  }
 
   return (
     <div className="lg:hidden flex items-center justify-between p-4 border-b border-zinc-800 bg-zinc-950 sticky top-0 z-40">
-      <div className="font-semibold text-white">Admin Dashboard</div>
+      <div className="flex items-center gap-3">
+        {showBack && (
+          <button
+            onClick={handleBack}
+            className="flex items-center justify-center h-9 w-9 rounded-lg bg-zinc-800/50 hover:bg-zinc-700/50 text-zinc-400 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+        )}
+        <div className="font-semibold text-white">{getTitle()}</div>
+      </div>
       <button
         onClick={() => setIsOpen(true)}
         className="p-2 -mr-2 text-zinc-400 hover:text-white"

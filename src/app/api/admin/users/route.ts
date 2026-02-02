@@ -59,21 +59,68 @@ export async function GET(request: Request) {
       }, { status: 500 })
     }
 
-    // Fetch wallets for these users
+    // Fetch wallets for these users - order by updated_at DESC to get the most recently updated
     const userIds = profiles?.map(p => p.id) || []
     const { data: wallets } = await adminClient
       .from('wallets')
       .select('*')
       .in('user_id', userIds)
+      .order('updated_at', { ascending: false })
+
+    // Create map of existing wallets - if duplicates exist, the first (most recent) wins
+    // because forEach will set the first one only if the key doesn't already exist doesn't apply here
+    // So we need to ensure the first wallet (most recent) is kept
+    const walletsMap = new Map<string, typeof wallets extends (infer T)[] | null ? T : never>()
+    if (wallets) {
+      for (const w of wallets) {
+        if (!walletsMap.has(w.user_id)) {
+          walletsMap.set(w.user_id, w)
+        }
+      }
+    }
+
+    // Find users without wallets and create them
+    const usersWithoutWallets = userIds.filter(id => !walletsMap.has(id))
+
+    if (usersWithoutWallets.length > 0) {
+      console.log(`Creating wallets for ${usersWithoutWallets.length} users without wallets`)
+
+      const newWallets = usersWithoutWallets.map(userId => ({
+        user_id: userId,
+        balance: 0,
+        currency: 'USD'
+      }))
+
+      const { data: createdWallets, error: createError } = await adminClient
+        .from('wallets')
+        .insert(newWallets)
+        .select()
+
+      if (createError) {
+        console.error('Error creating wallets:', createError)
+      } else if (createdWallets) {
+        // Add newly created wallets to the map
+        createdWallets.forEach(w => walletsMap.set(w.user_id, w))
+        console.log(`Created ${createdWallets.length} new wallets`)
+      }
+    }
 
     // Combine profiles with their wallets
-    const walletsMap = new Map(wallets?.map(w => [w.user_id, w]) || [])
     const usersWithWallets = profiles?.map(p => ({
       ...p,
       wallets: walletsMap.get(p.id) ? [walletsMap.get(p.id)] : []
     })) || []
 
-    return NextResponse.json({ users: usersWithWallets, total: count || 0, page, limit })
+    return NextResponse.json(
+      { users: usersWithWallets, total: count || 0, page, limit },
+      {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      }
+    )
   } catch (err: unknown) {
     const error = err as Error
     console.error('API Error:', error)
