@@ -72,6 +72,66 @@ export async function GET(
   return NextResponse.json({ user: profileWithWallet, transactions })
 }
 
+// PATCH - Update user settings (like mining_active)
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ userId: string }> }
+) {
+  try {
+    const supabase = await createClient()
+    const { userId } = await params
+
+    // Verify user is authenticated
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Use admin client for admin operations
+    const adminClient = createAdminClient()
+
+    // Check if admin
+    const { data: adminProfile } = await adminClient
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', user.id)
+      .single()
+
+    if (!adminProfile?.is_admin) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    const body = await request.json()
+    const { mining_active } = body
+
+    // Update user profile
+    const { data: updatedProfile, error: updateError } = await adminClient
+      .from('profiles')
+      .update({ mining_active } as Record<string, unknown>)
+      .eq('id', userId)
+      .select()
+      .single()
+
+    if (updateError) {
+      return NextResponse.json({ error: updateError.message }, { status: 500 })
+    }
+
+    // Log admin action (ignore type for custom action_type)
+    await adminClient.from('admin_audit_logs').insert({
+      admin_id: user.id,
+      action_type: 'profile_view', // Using existing type for compatibility
+      target_user_id: userId,
+      details: { action: 'mining_toggle', mining_active }
+    })
+
+    return NextResponse.json({ success: true, user: updatedProfile })
+  } catch (err: unknown) {
+    const error = err as Error
+    console.error('Update user error:', error)
+    return NextResponse.json({ error: error.message || 'Failed to update user' }, { status: 500 })
+  }
+}
+
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ userId: string }> }
@@ -153,3 +213,4 @@ export async function DELETE(
     return NextResponse.json({ error: error.message || 'Failed to delete user' }, { status: 500 })
   }
 }
+

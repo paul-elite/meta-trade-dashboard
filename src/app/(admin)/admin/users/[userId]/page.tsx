@@ -22,7 +22,9 @@ import {
   Clock,
   TrendingUp,
   TrendingDown,
-  AlertTriangle
+  AlertTriangle,
+  Pickaxe,
+  Loader2
 } from 'lucide-react'
 
 export default function UserDetailPage() {
@@ -36,6 +38,7 @@ export default function UserDetailPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [isMiningToggling, setIsMiningToggling] = useState(false)
 
   useEffect(() => {
     fetchUserDetails()
@@ -87,6 +90,26 @@ export default function UserDetailPage() {
     } finally {
       setIsDeleting(false)
       setShowDeleteModal(false)
+    }
+  }
+
+  const handleMiningToggle = async () => {
+    if (!user || isMiningToggling) return
+    setIsMiningToggling(true)
+    try {
+      const newValue = !(user as unknown as { mining_active?: boolean }).mining_active
+      const response = await fetch(`/api/admin/users/${userId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mining_active: newValue })
+      })
+      if (response.ok) {
+        setUser({ ...user, mining_active: newValue } as unknown as UserWithWallet)
+      }
+    } catch (error) {
+      console.error('Error toggling mining:', error)
+    } finally {
+      setIsMiningToggling(false)
     }
   }
 
@@ -234,6 +257,40 @@ export default function UserDetailPage() {
                     </div>
                   </div>
 
+                  {/* Mining Status Toggle */}
+                  {!user.is_admin && (
+                    <div className="flex items-center justify-between p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <Pickaxe className="h-5 w-5 text-orange-500" />
+                        <div>
+                          <p className="text-sm font-medium text-white">Mining Status</p>
+                          <p className="text-xs text-zinc-400">
+                            {(user as unknown as { mining_active?: boolean }).mining_active ? 'Mining is active for this user' : 'Mining is disabled for this user'}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={handleMiningToggle}
+                        disabled={isMiningToggling}
+                        className={`relative w-12 h-6 rounded-full transition-colors ${(user as unknown as { mining_active?: boolean }).mining_active
+                            ? 'bg-green-500'
+                            : 'bg-zinc-700'
+                          }`}
+                      >
+                        {isMiningToggling ? (
+                          <Loader2 className="h-4 w-4 animate-spin absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white" />
+                        ) : (
+                          <span
+                            className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${(user as unknown as { mining_active?: boolean }).mining_active
+                                ? 'translate-x-7'
+                                : 'translate-x-1'
+                              }`}
+                          />
+                        )}
+                      </button>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 gap-4 pt-2">
                     {/* Email */}
                     <div className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg">
@@ -322,8 +379,8 @@ export default function UserDetailPage() {
                           {tx.type.replace('_', ' ')}
                         </Badge>
                         <span className={`text-sm font-medium ${tx.type.includes('credit') || tx.type === 'deposit'
-                            ? 'text-green-500'
-                            : 'text-red-500'
+                          ? 'text-green-500'
+                          : 'text-red-500'
                           }`}>
                           {tx.type.includes('credit') || tx.type === 'deposit' ? '+' : '-'}
                           {formatCurrency(tx.amount, 'USD')}
@@ -372,8 +429,8 @@ export default function UserDetailPage() {
                             {formatDate(tx.created_at)}
                           </td>
                           <td className={`px-4 py-3 text-sm text-right font-medium ${tx.type.includes('credit') || tx.type === 'deposit'
-                              ? 'text-green-500'
-                              : 'text-red-500'
+                            ? 'text-green-500'
+                            : 'text-red-500'
                             }`}>
                             {tx.type.includes('credit') || tx.type === 'deposit' ? '+' : '-'}
                             {formatCurrency(tx.amount, 'USD')}

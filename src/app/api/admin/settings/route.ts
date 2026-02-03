@@ -6,10 +6,9 @@ export const dynamic = 'force-dynamic'
 
 interface SiteSettings {
     id?: string
-    phone_number: string
+    whatsapp: string
+    telegram: string
     email: string
-    support_hours: string
-    address: string
     created_at?: string
     updated_at?: string
 }
@@ -34,10 +33,9 @@ function createRawAdminClient() {
 // GET settings (public)
 export async function GET() {
     const defaultSettings: SiteSettings = {
-        phone_number: '+1 (555) 123-4567',
+        whatsapp: '',
+        telegram: '',
         email: 'infobitcapmining@gmail.com',
-        support_hours: '24/7',
-        address: '',
     }
 
     try {
@@ -85,7 +83,7 @@ export async function PUT(request: Request) {
         }
 
         const body = await request.json()
-        const { phone_number, email, support_hours, address } = body
+        const { whatsapp, telegram, email } = body
 
         // Check if settings exist
         const { data: existing } = await adminClient
@@ -100,10 +98,9 @@ export async function PUT(request: Request) {
             result = await adminClient
                 .from('site_settings')
                 .update({
-                    phone_number,
+                    whatsapp,
+                    telegram,
                     email,
-                    support_hours,
-                    address,
                     updated_at: new Date().toISOString(),
                 })
                 .eq('id', existing.id)
@@ -114,10 +111,9 @@ export async function PUT(request: Request) {
             result = await adminClient
                 .from('site_settings')
                 .insert({
-                    phone_number,
+                    whatsapp,
+                    telegram,
                     email,
-                    support_hours,
-                    address,
                 })
                 .select()
                 .single()

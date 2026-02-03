@@ -1,18 +1,18 @@
--- Create site_settings table for contact info
-CREATE TABLE IF NOT EXISTS site_settings (
+-- Drop old table and create new one with correct fields
+DROP TABLE IF EXISTS site_settings;
+
+CREATE TABLE site_settings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  phone_number TEXT DEFAULT '+1 (555) 123-4567',
+  whatsapp TEXT DEFAULT '',
+  telegram TEXT DEFAULT '',
   email TEXT DEFAULT 'infobitcapmining@gmail.com',
-  support_hours TEXT DEFAULT '24/7',
-  address TEXT DEFAULT '',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Insert default settings
-INSERT INTO site_settings (phone_number, email, support_hours)
-VALUES ('+1 (555) 123-4567', 'infobitcapmining@gmail.com', '24/7')
-ON CONFLICT DO NOTHING;
+INSERT INTO site_settings (whatsapp, telegram, email)
+VALUES ('', '', 'infobitcapmining@gmail.com');
 
 -- Enable RLS
 ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
