@@ -6,6 +6,7 @@ import { TransactionList } from '@/components/dashboard/transaction-list'
 import { QuickActions } from '@/components/dashboard/quick-actions'
 import { BalanceChart } from '@/components/dashboard/balance-chart'
 import { LiveCryptoPrices } from '@/components/dashboard/live-crypto-prices'
+import { InvestmentPlans } from '@/components/dashboard/investment-plans'
 import { useStore } from '@/store/useStore'
 
 export default function DashboardPage() {
@@ -37,6 +38,9 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* Investment Plans */}
+        <InvestmentPlans />
+
         {/* Chart and Transactions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           <BalanceChart />
@@ -46,3 +50,4 @@ export default function DashboardPage() {
     </div>
   )
 }
+
