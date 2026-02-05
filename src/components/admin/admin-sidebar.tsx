@@ -10,6 +10,7 @@ import {
   ArrowLeft,
   Coins,
   Settings,
+  ImageIcon,
 } from 'lucide-react'
 import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
@@ -20,6 +21,7 @@ const navigation = [
   { name: 'Overview', href: '/admin', icon: LayoutDashboard },
   { name: 'Users', href: '/admin/users', icon: Users },
   { name: 'Crypto', href: '/admin/crypto', icon: Coins },
+  { name: 'Banners', href: '/admin/banners', icon: ImageIcon },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ]
 

@@ -7,6 +7,7 @@ import { QuickActions } from '@/components/dashboard/quick-actions'
 import { BalanceChart } from '@/components/dashboard/balance-chart'
 import { LiveCryptoPrices } from '@/components/dashboard/live-crypto-prices'
 import { InvestmentPlans } from '@/components/dashboard/investment-plans'
+import { PromoCarousel } from '@/components/dashboard/promo-carousel'
 import { useStore } from '@/store/useStore'
 
 export default function DashboardPage() {
@@ -40,6 +41,9 @@ export default function DashboardPage() {
 
         {/* Investment Plans */}
         <InvestmentPlans />
+
+        {/* Promo Banners Carousel */}
+        <PromoCarousel />
 
         {/* Chart and Transactions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">

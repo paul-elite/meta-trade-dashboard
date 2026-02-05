@@ -246,6 +246,42 @@ export interface Database {
         }
         Relationships: []
       }
+      promo_banners: {
+        Row: {
+          id: string
+          image_url: string
+          storage_path: string
+          title: string | null
+          link_url: string | null
+          display_order: number
+          is_enabled: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          image_url: string
+          storage_path: string
+          title?: string | null
+          link_url?: string | null
+          display_order?: number
+          is_enabled?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          image_url?: string
+          storage_path?: string
+          title?: string | null
+          link_url?: string | null
+          display_order?: number
+          is_enabled?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -269,6 +305,7 @@ export type AdminAuditLog = Database['public']['Tables']['admin_audit_logs']['Ro
 export type CryptoOption = Database['public']['Tables']['crypto_options']['Row']
 export type Conversation = Database['public']['Tables']['conversations']['Row']
 export type Message = Database['public']['Tables']['messages']['Row']
+export type PromoBanner = Database['public']['Tables']['promo_banners']['Row']
 
 export interface UserWithWallet extends Profile {
   wallets: Wallet[]
