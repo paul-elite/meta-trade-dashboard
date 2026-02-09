@@ -6,7 +6,6 @@ import { TransactionList } from '@/components/dashboard/transaction-list'
 import { QuickActions } from '@/components/dashboard/quick-actions'
 import { BalanceChart } from '@/components/dashboard/balance-chart'
 import { LiveCryptoPrices } from '@/components/dashboard/live-crypto-prices'
-import { InvestmentPlans } from '@/components/dashboard/investment-plans'
 import { PromoCarousel } from '@/components/dashboard/promo-carousel'
 import { useStore } from '@/store/useStore'
 
@@ -38,9 +37,6 @@ export default function DashboardPage() {
             <QuickActions />
           </div>
         </div>
-
-        {/* Investment Plans */}
-        <InvestmentPlans />
 
         {/* Promo Banners Carousel */}
         <PromoCarousel />

@@ -10,8 +10,13 @@ import { generateReference } from '@/lib/utils'
 import { CheckCircle2, Copy, Check, Loader2, Wallet, AlertCircle } from 'lucide-react'
 import type { CryptoOption } from '@/types/database'
 import QRCode from 'react-qr-code'
+import type { InvestmentPlan } from '@/app/(dashboard)/deposit/page'
 
-export function DepositForm() {
+interface DepositFormProps {
+  selectedPlan?: InvestmentPlan
+}
+
+export function DepositForm({ selectedPlan }: DepositFormProps) {
   const [amount, setAmount] = useState('')
   const [selectedCrypto, setSelectedCrypto] = useState<CryptoOption | null>(null)
   const [cryptoOptions, setCryptoOptions] = useState<CryptoOption[]>([])
@@ -79,12 +84,26 @@ export function DepositForm() {
     try {
       const depositAmount = parseFloat(amount)
 
-      // Check min deposit
+      // Check min deposit from crypto option
       if (selectedCrypto.min_deposit && depositAmount < selectedCrypto.min_deposit) {
         throw new Error(`Minimum deposit is $${selectedCrypto.min_deposit}`)
       }
 
-      // Create transaction
+      // Check min deposit from selected plan
+      if (selectedPlan && depositAmount < selectedPlan.minInvestment) {
+        throw new Error(`Minimum deposit for ${selectedPlan.name} is $${selectedPlan.minInvestment.toLocaleString()}`)
+      }
+
+      // Check max deposit from selected plan
+      if (selectedPlan && depositAmount > selectedPlan.maxInvestment) {
+        throw new Error(`Maximum deposit for ${selectedPlan.name} is $${selectedPlan.maxInvestment.toLocaleString()}`)
+      }
+
+      // Create transaction with plan info if selected
+      const planDescription = selectedPlan
+        ? ` for ${selectedPlan.name}`
+        : ''
+
       const { data: transaction, error: txError } = await supabase
         .from('transactions')
         .insert({
@@ -92,7 +111,7 @@ export function DepositForm() {
           type: 'deposit',
           amount: depositAmount,
           status: 'pending', // Pending admin approval
-          description: `Deposit via ${selectedCrypto.symbol} (${selectedCrypto.network})`,
+          description: `Deposit via ${selectedCrypto.symbol} (${selectedCrypto.network})${planDescription}`,
           reference: generateReference(),
         })
         .select()
@@ -252,11 +271,15 @@ export function DepositForm() {
                   onChange={(e) => setAmount(e.target.value)}
                   className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-yellow-500/50 focus:ring-yellow-500/20 text-lg py-6"
                 />
-                {selectedCrypto.min_deposit > 0 && (
+                {selectedPlan ? (
+                  <p className="text-xs text-zinc-500">
+                    Investment range: ${selectedPlan.minInvestment.toLocaleString()} - ${selectedPlan.maxInvestment.toLocaleString()}
+                  </p>
+                ) : selectedCrypto.min_deposit > 0 ? (
                   <p className="text-xs text-zinc-500">
                     Minimum deposit: ${selectedCrypto.min_deposit}
                   </p>
-                )}
+                ) : null}
               </div>
 
               {error && (
