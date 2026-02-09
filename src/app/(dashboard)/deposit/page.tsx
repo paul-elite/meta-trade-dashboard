@@ -34,7 +34,8 @@ const plans = [
       'Instant portfolio setup',
       '24/7 customer support'
     ],
-    tagline: 'Best for new investors getting started with crypto mining.'
+    tagline: 'Best for new investors getting started with crypto mining.',
+    cta: 'Start Basic Plan'
   },
   {
     name: 'Silver Mining Plan',
@@ -51,7 +52,8 @@ const plans = [
       'Faster withdrawals',
       'Dedicated support'
     ],
-    tagline: 'Ideal for growing portfolios.'
+    tagline: 'Ideal for growing portfolios.',
+    cta: 'Choose Silver'
   },
   {
     name: 'Gold Mining Plan',
@@ -68,7 +70,8 @@ const plans = [
       'Portfolio optimization',
       'Account manager'
     ],
-    tagline: 'Designed for serious investors.'
+    tagline: 'Designed for serious investors.',
+    cta: 'Go Gold'
   },
   {
     name: 'Platinum / VIP Plan',
@@ -86,7 +89,8 @@ const plans = [
       'Personalized mining strategy',
       'Priority customer care'
     ],
-    tagline: 'Exclusive tier for high-net-worth investors.'
+    tagline: 'Exclusive tier for high-net-worth investors.',
+    cta: 'Join VIP'
   }
 ]
 
@@ -143,16 +147,12 @@ export default function DepositPage() {
 
   const handleSelectPlan = (plan: InvestmentPlan) => {
     setSelectedPlan(plan)
-  }
-
-  const handleContinueToDeposit = () => {
-    if (selectedPlan) {
-      setStep('deposit')
-    }
+    setStep('deposit')
   }
 
   const handleBackToPlans = () => {
     setStep('select-plan')
+    setSelectedPlan(null)
   }
 
   if (step === 'deposit' && selectedPlan) {
@@ -205,23 +205,12 @@ export default function DepositPage() {
           {plans.map((plan) => {
             const styles = colorStyles[plan.color]
             const Icon = plan.icon
-            const isSelected = selectedPlan?.tier === plan.tier
 
             return (
               <Card
                 key={plan.tier}
-                onClick={() => handleSelectPlan(plan)}
-                className={`relative overflow-hidden bg-gradient-to-br ${styles.bg} ${isSelected ? styles.selected : styles.border} transition-all duration-300 hover:scale-[1.02] cursor-pointer`}
+                className={`relative overflow-hidden bg-gradient-to-br ${styles.bg} ${styles.border} transition-all duration-300 hover:scale-[1.02]`}
               >
-                {/* Selection indicator */}
-                {isSelected && (
-                  <div className="absolute top-3 left-3">
-                    <div className={`p-1 rounded-full ${styles.iconBg}`}>
-                      <CheckCircle2 className={`h-4 w-4 ${styles.text}`} />
-                    </div>
-                  </div>
-                )}
-
                 {/* Popular badge for Gold */}
                 {plan.tier === 'gold' && (
                   <div className="absolute top-3 right-3">
@@ -289,24 +278,20 @@ export default function DepositPage() {
 
                   {/* Tagline */}
                   <p className="text-xs text-zinc-400 italic">{plan.tagline}</p>
+
+                  {/* CTA Button */}
+                  <Button
+                    variant="secondary"
+                    className={`w-full ${plan.tier === 'platinum' ? 'bg-orange-500 hover:bg-orange-600 text-white' : ''}`}
+                    rightIcon={<ArrowRight className="h-4 w-4" />}
+                    onClick={() => handleSelectPlan(plan)}
+                  >
+                    {plan.cta}
+                  </Button>
                 </CardContent>
               </Card>
             )
           })}
-        </div>
-
-        {/* Continue Button */}
-        <div className="flex justify-center">
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={handleContinueToDeposit}
-            disabled={!selectedPlan}
-            rightIcon={<ArrowRight className="h-4 w-4" />}
-            className="min-w-[200px]"
-          >
-            Continue to Deposit
-          </Button>
         </div>
       </div>
     </div>
